@@ -1,0 +1,379 @@
+\documentclass[a4paper,12pt,landscape]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage{amsfonts}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{array}
+%\usepackage{wrapfigure}
+
+\begin{document}
+\title{Projet EDMO}
+\author{Annie Cathignol\\Louis Becquey\\3-BIM}
+\date{\today}
+\maketitle
+\newpage
+
+\section{Questions de Cours}
+\subsection{Résultat 1}
+{\it \bf Pour toute fonction f assez régulière (de classe $C^{p}$ ), le schéma explicite à un pas est consistant d’ordre p avec le problème de Cauchy correspondant si:}\\
+\begin{center}
+$\Phi (t,x,0) = f(t,x)$ ,  \\
+$\frac{\partial \Phi}{\partial h} (t,x,0) = \frac{1}{2}Df(t,x)$ , \\
+$\vdots$ \\
+$\frac{\partial^{p-1}\Phi}{\partial h^{p-1}} (t,x,0) = \frac{1}{p}D^{p-1}f(t,x)$ , \\
+\end{center}
+
+En effet, 
+
+\subsection{Résultat 2}
+{\it \bf Pour qu’un schéma de Runge-Kutta explicite à un pas soit au-moins d’ordre 2, il faut et il suffit que les points $b_{i}$, les poids intermédiaires $a_{i,j}$ et les paramètres $c_{i}$ (i, j variant de 1 à s) vérifient:} $$\sum_{i=1}^{s}b_{i}c_{i} = \frac{1}{2} \; \textrm{   d'une part, et d'autre part   } \; \sum_{i=1}^{s}b_{i}(\sum_{j=1}^{i-1}a_{i,j})= \frac{1}{2}$$
+
+En effet,
+
+\section{Exercice 1 - Problème raide}
+On considère le problème de Cauchy suivant :
+trouver $u \in C^{1}([0,1], \mathbb{R} )$ telle que
+$$
+(C) \left \{
+\begin{array}{l}
+	u'(t)= -150u(t) + 30 \\
+	u(0) = 1
+\end{array}
+\right.
+$$
+\newpage
+\subsection{}
+Il s'agit d'une équation différentielle linéaire d'ordre 1, avec second membre, on peut trouver une solution exacte en procédant comme suit:\\
+Partons de l'équation $$u' + 150u = 30$$
+Multiplions chaque terme par $e^{150t}$ : $$u'.e^{150t}+150.e^{150t}.u = 30.e^{150t}$$
+$$(u.e^{150t})'=30.e^{150t}$$
+Intégrons entre 0 et t ($t \in [0,1]$): $$\int_{0}^{t}(u_{(s)}.e^{150s})'.ds = \int_{0}^{t}30.e^{150s}.ds$$
+$$u_{(t)}.e^{150t}-u_{(0)} = {\left [ \frac{1}{5}e^{150s} \right ]}_{0}^{t}= \frac{1}{5}e^{150t}-\frac{1}{5}$$
+$$u_{(t)} = { \left ( \frac{e^{150t}+4}{5} \right ) }e^{-150t}$$
+$$u_{(t)} = \frac{1}{5}+\frac{4}{5}e^{-150t}$$
+Cette fonction u est bien définie sur l'intervalle [0,1], vérifions qu'elle est bien solution du problème (C):\\
+
+$u_{(0)}= \frac{1}{5}+\frac{4}{5}=\frac{5}{5}=1 \Rightarrow $ OK\\
+
+$u'_{(t)}= -120e^{-150t}$\\
+
+$-150 u_{(t)} +30 = -150{ \left( \frac{1}{5}+\frac{4}{5}e^{-150t} \right) } +30 = -30 -120e^{-150t} +30 = u'_{(t)} \Rightarrow $OK\\
+
+Donc on a bien une solution exacte au problème de Cauchy.
+
+On a donc quand $t \rightarrow \infty$, 
+$$\lim_{t \rightarrow +\infty}u_{(t)}=\frac{1}{5}+\frac{4}{5} { \left( \lim_{t \rightarrow +\infty}e^{-150t} \right ) }= \frac{1}{5}.$$
+
+\subsection{}
+Considérons le schéma d'Euler explicite pour ce problème de Cauchy:
+$$\left \{
+\begin{array}{l}
+	u_{n+1}= u_{n} + h f(t_n , u_n)\\
+	u_0 = 1
+\end{array}
+\right.
+\Leftrightarrow
+\left \{
+\begin{array}{l}
+	u_{n+1}= u_{n} + h(-150 u_n + 30)\\
+	u_0 = 1
+\end{array}
+\right.
+\Leftrightarrow
+\left \{
+\begin{array}{l}
+	u_{n+1}= (1-150h)u_{n} + 30h\\
+	u_0 = 1
+\end{array}
+\right.$$
+On peut écrire une relation de récurrence entre $u_{n+1}-\frac{1}{5}$ et $u_{n}-\frac{1}{5}$:
+$$u_{n+1}-\frac{1}{5}= u_n - 150hu_n+30h-\frac{1}{5}= (u_n-\frac{1}{5})-150hu_n + 30h = (u_n-\frac{1}{5})-150h(u_n-\frac{1}{5})$$
+$$(u_{n+1}-\frac{1}{5})= (u_n-\frac{1}{5})(1-150h)$$
+Cette relation permet d'exprimer $u_n$ en fonction de n et h:\\
+Soit $x_n=u_{n}-\frac{1}{5}$, on a $x_{n+1}=(1-150h)x_n$, donc par exemple $x_1=(1-150h).x_0$, puis $x_2=(1-150h)^2.x_0$, et on peut montrer par récurrence que, pour $n \in \mathbb{N}^*$,
+$$x_n=(1-150h)^n.x_0$$
+D'où $(u_n-\frac{1}{5})=(1-150h)^n(u_0-\frac{1}{5})$, et comme $u_0=1$:
+$$u_n=\frac{4}{5}(1-150h)^n+\frac{1}{5}$$
+Si l'on suppose ensuite $h=1/50$ constant, on peut ré-écrire l'expression précédente sous la forme: $$u_n=\frac{4}{5}(-2)^n+\frac{1}{5}$$ On constate que la limite de $u_n$ quand $t \rightarrow \infty$ n'existe pas avec ce schéma.\\
+On peut donc en conclure que ce schéma d'Euler explicite n'est pas  asymptotiquement stable: Lorsqu'on fait de plus en plus d'itérations, on ne se rapproche pas de la solution exacte.
+
+\subsection{}
+Considérons donc plutôt un schéma d'Euler implicite {\it (On rappelle que comme h>0, (1+150h)>0 )}
+$$\left \{
+\begin{array}{l}
+	u_{n+1}= u_{n} + h f(t_{n+1} , u_{n+1})\\
+	u_0 = 1
+\end{array}
+\right.
+\Leftrightarrow
+\left \{
+\begin{array}{l}
+	u_{n+1}= u_{n} + h(-150 u_{n+1} + 30)\\
+	u_0 = 1
+\end{array}
+\right.$$
+$$\begin{array}{l}
+	u_{n+1}=u_n - 150h u_{n+1} + 30h\\
+	(150h +1)u_{n+1} = u_n + 30h\\
+\end{array}
+\Leftrightarrow
+u_{n+1}=\frac{u_n+30h}{(1+150h)}$$
+Cette fois, la relation de récurrence entre $u_{n+1}-\frac{1}{5}$ et $u_{n}-\frac{1}{5}$ donne:
+$$(u_{n+1}-\frac{1}{5})=\frac{u_n+30h}{(1+150h)}-\frac{1}{5}=\frac{5(u_n+30h)-(1+150h)}{5(1+150h)}=\frac{(u_n+30h)-(\frac{1}{5}+30h)}{(1+150h)}=\frac{u_n+30h-\frac{1}{5}-30h}{(1+150h)}=\frac{(u_n-\frac{1}{5})}{(1+150h)}$$
+Posons $x_n=u_{n}-\frac{1}{5}$, on a alors $x_{n+1}=x_n/(1+150h)$, donc par exemple $x_1=x_0/(1+150h)$, puis $x_2=x_0/(1+150h)^2$, et on peut montrer par récurrence que, pour $n \in \mathbb{N}^*$,
+$$x_n=x_0/(1+150h)^n$$
+D'où $(u_n-\frac{1}{5})=\frac{(u_0-\frac{1}{5})}{(1+150h)^n}$, et comme $u_0=1$:
+$$u_n=\frac{4}{5}\frac{1}{(1+150h)^n}+\frac{1}{5}$$
+Si l'on suppose ensuite $h=1/50$ constant, on peut ré-écrire l'expression précédente sous la forme: $$u_n=\frac{4}{5*4^n}+\frac{1}{5}$$
+Cette fois, on peut écrire que $$\lim_{n \rightarrow +\infty}u_n = \frac{1}{5}\lim_{n \rightarrow +\infty}{ \left( \frac{1}{4^{n-1}} \right) }+\frac{1}{5}=\frac{1}{5}$$
+Cette fois, on peut donc conclure que lorsqu'on augmente le nombre d'itérations, on converge vers la valeur numérique de la solution exacte: ce schéma d'Euler implicite est donc asymptotiquement stable.
+
+
+\section{Exercice 2 - Une mise en jambe pour la programmation}
+
+On considère le problème de Cauchy suivant :
+trouver y définie sur [0,4] telle que
+$$
+(C2) \left \{
+\begin{array}{l}
+	y'(t)= 4e^{0.8t}-0.5y(t) \\
+	y(0) = 2
+\end{array}
+\right.
+$$
+\subsection{}
+On a un problème de Cauchy y'=f(t,y) où f(t,y) est continue sur $\mathbb{R}^2$: $f(t,y)=4e^{0.8t}-0.5y$. Cette même fonction est localement lipschitzienne par rapport à sa variable y, puisqu'elle est de classe $C^1$ dans [0,4].\\
+Donc selon le théorème de Cauchy-Lipschitz, on a existence, unicité et régularité d'une solution y(t) définie sur au moins [0,4].\\
+
+Cherchons la solution exacte du problème: il s'agit d'une équation différentielle linéaire du premier ordre avec second membre. Procédons comme suit:
+$$y'+0.5y=4.e^{0.8t}$$
+Multiplions chaque terme par $e^{0.5t}$ : $$(e^{0.5t}.y(t))'=4e^{1.3t}$$
+Intégrons entre 0 et t: $${\left[ e^{0.5s}.y(s) \right]}^t_0={\left[ \frac{4}{1.3}e^{1.3s} \right]}^t_0$$
+$$e^{0.5t}.y(t)-y(0)=\frac{4}{1.3}e^{1.3t}-\frac{4}{1.3}$$
+$$y(t)={\left( \frac{4}{1.3}e^{1.3t}-\frac{4}{1.3}+2 \right)}e^{-0.5t}$$
+$$y(t)=\frac{4}{1.3}e^{0.8t}+{\left( 2-\frac{4}{1.3} \right) }e^{-0.5t}$$
+$$y(t)=\frac{4}{1.3}e^{0.8t} -\frac{1.4}{1.3} e^{-0.5t}$$
+Cette fonction y est bien définie sur [0,4], et on a bien $y(0)=2$.
+
+\subsection{}
+Considérons le schéma d'Euler explicite associé à ce problème {\it (On a h=1)}:
+$$\left \{
+\begin{array}{l}
+	y_{n+1}= y_n + h f(t_n,y_n)\\
+	y_0 = 2
+\end{array}
+\right.
+\Leftrightarrow
+\left \{
+\begin{array}{l}
+	y_{n+1}= y_n + 4e^{0.8t_n}-0.5y_n\\
+	y_0 = 2
+\end{array}
+\right.
+\Leftrightarrow
+\left \{
+\begin{array}{l}
+	y_{n+1}= 0.5y_n + 4e^{0.8t_n}\\
+	y_0 = 2
+\end{array}
+\right.$$
+\paragraph{A l'ordre 1}
+Ici, $\Phi(t,y,h)$=f(t,y) qui est lipschitzienne par rapport à sa deuxième variable. Donc $\Phi$ est lipschitzienne par rapport à sa deuxième variable, donc le schéma est stable à l'ordre 1.\\
+De plus, comme $\Phi(t,y,h)$=f(t,y) on a $\Phi(t,y,0)$=f(t,y), donc le schéma est consistant d'ordre 1 avec le problème de Cauchy.\\
+
+Donc par le théorème de LAX, le schéma est convergent d'ordre au moins 1 vers la solution du problème de Cauchy.
+
+\paragraph{A l'ordre 2}
+Ici, $\Phi(t,y,h)$ est de classe $C^2$. Donc $\Phi$ est lipschitzienne par rapport à sa deuxième variable, donc le schéma est stable à l'ordre 2 également.\\
+Cette fois par contre, $\frac{\partial \Phi}{\partial h} (t,y,0)=0 \neq \frac{1}{2}Df(t,y)$, donc le schéma n'est pas consistant à l'ordre 2.\\
+%\begin{wrapfigure}[1]{r}{10cm}
+%	\includegraphics[scale=0.45]{figure_1.png}
+%	\caption{Comparaison entre méthode numérique et solution réelle sur l'intervalle [0,4]}
+%\end{wrapfigure}
+Donc le schéma n'est convergent que d'ordre 1.
+
+\subsection{}
+
+Avec ce schéma (Euler explicite), nous obtenons les résultats suivants:\\
+L'erreur reste élevée (converge vers 24.66\%), et on voit bien que\\ le schéma n'est pas asymptotiquement convergent.
+
+\begin{table}[h]
+\hspace{2cm}
+\begin{tabular}{|c|c|c|c|}
+\hline
+	$t_i$ & $y(t_i)$ & $y_i$ & $\epsilon_i$ \\
+\hline
+	$t_0=0$ & $2$ & 2 & $10^{-14}\%$ \\
+\hline
+	$t_1=1$ & $\frac{4}{1.3}e^{0.8} -\frac{1.4}{1.3\sqrt{e}}\approx 6.19$ & $\approx 5$ & $19.3\%$ \\
+\hline
+	$t_2=2$ & $\frac{4}{1.3}e^{1.6} -\frac{1.4}{1.3e}\approx 14.84$ & $\approx 11.40$  & $23.2\%$ \\
+\hline
+	$t_3=3$ & $\frac{4}{1.3}e^{2.4} -\frac{1.4}{1.3e\sqrt{e}}\approx 33.68$& $\approx 25.51$ & $24.2\%$ \\
+\hline
+	$t_4=4$ & $\frac{4}{1.3}e^{3.2} -\frac{1.4}{1.3e^2}\approx 75.33$ & $ \approx 56.85$  & $24.5\%$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Exercice 3 - Comparaison entre plusieurs méthodes}
+On considère le problème de Cauchy suivant pour $t\in [0,T]$:
+$$
+(C3) \left \{
+\begin{array}{l}
+	x'(t)= -tx(t) \\
+	x(0) = x_0
+\end{array}
+\right.
+$$
+\subsection{}
+On a un problème de Cauchy x'=f(t,x) où f(t,x) est continue sur $\mathbb{R}^2$: $f(t,x)=-tx$. Cette même fonction est localement lipschitzienne par rapport à sa variable x, puisqu'elle est de classe $C^1$ dans [0,T] comme dans tout $\mathbb{R}^2$.\\
+Donc selon le théorème de Cauchy-Lipschitz, on a existence, unicité et régularité d'une solution x(t) définie sur au moins [0,T].\\
+
+Cherchons la solution exacte du problème: il s'agit d'une équation différentielle du premier ordre à variables séparables. Ainsi,
+$$\frac{x'}{x}=-t$$
+$$\int_0^t\frac{x'_{(s)}}{x_{(s)}}.ds = - \int_0^t s.ds$$
+$$ln(x_{(t)})-ln(x_0)=-\frac{1}{2}t^2$$
+$$x(t)=x_0 e^{-\frac{1}{2}t^2}$$
+Cette fonction est bien définie sur les intervalles positifs, et x(0) vaut bien $x_0$.
+Vérifions:
+$$x'(t)=-t x_0 e^{-\frac{1}{2}t^2}=-tx(t)$$
+Donc il s'agit bien de la solution du problème de Cauchy.
+
+\subsection{}
+\subsubsection{Schéma d'Euler Explicite}
+Considérons le schéma d'Euler explicite associé à ce problème {\it (On a h=0.3)}:
+$$\left \{
+\begin{array}{l}
+	x_{n+1}= x_n + h f(t_n,x_n)\\
+	x_0 
+\end{array}
+\right.
+\Leftrightarrow
+\left \{
+\begin{array}{l}
+	x_{n+1}= x_n -ht_nx_n\\
+	x_0
+\end{array}
+\right.
+\Leftrightarrow
+\left \{
+\begin{array}{l}
+	x_{n+1}= (1-0.3t_n)x_n\\
+	x_0
+\end{array}
+\right.$$
+Ici, $\Phi(t,x,h)$=f(t,x) qui est lipschitzienne par rapport à sa deuxième variable. Donc $\Phi$ est lipschitzienne par rapport à sa deuxième variable, donc le schéma est stable.\\
+
+\subsubsection{Schéma du point milieu}
+Le schéma du point milieu associé \textit{(h vaut toujours 0.3)}:\\
+$$\left \{
+\begin{array}{l}
+	x_{n+1}= x_n + h f(t_n+\frac{h}{2},x_n+\frac{h}{2}f(t_n,x_n))\\
+	x_0 
+\end{array}
+\right.
+\Leftrightarrow
+\left \{
+\begin{array}{l}
+	x_{n+1}= x_n +0.3\left[ -\left( t_n+\frac{0.3}{2}\right) \left( x_n+\frac{0.3}{2}(-t_nx_n)\right) \right]\\
+	x_0
+\end{array}
+\right.$$
+$$\Leftrightarrow
+\left \{
+\begin{array}{l}
+	x_{n+1}= x_n-0.3(t_n+0.15)(1-0.15t_n)x_n\\
+	x_0
+\end{array}
+\right.
+\Leftrightarrow
+\left \{
+\begin{array}{l}
+	x_{n+1}= (1-0.3(t_n+0.15)(1-0.15t_n))x_n\\
+	x_0
+\end{array}
+\right.$$
+$\Phi(t,x,h)=-(t+\frac{h}{2})(x-\frac{h}{2}tx)$ est de classe $C^\infty$, donc suffisamment régulière. On la supposera donc lipschitzienne par rapport à sa deuxième variable, donc le schéma est stable.
+\subsubsection{Schéma de Runge-Kutta-4}
+Intéressons nous aussi au schéma de Runge-Kutta 4 associé à ce problème de Cauchy \textit{(h=0.3 constant)}:
+$$\left \{
+\begin{array}{l}
+	x_0 \\
+	X_1=x_n\\
+	X_2=x_n-\frac{h}{2}t_nX_1\\
+	X_3=x_n-\frac{h}{2}(t_n+\frac{h}{2})X_2\\
+	X_4=x_n-h(t_n+\frac{h}{2})X_3\\
+	x_{n+1}=x_n-h\left[\frac{1}{6}t_nX_1+\frac{1}{3}(t_n+\frac{h}{2})X_2+\frac{1}{3}(t_n+\frac{h}{2})X_3+\frac{1}{6}(t_n+h)X_4\right]
+\end{array}
+\right.
+\left \{
+\begin{array}{l}
+	x_0 \\
+	X_1=x_n\\
+	X_2=x_n-0.15t_nx_n\\
+	X_3=x_n-0.15(t_n+0.15)(x_n-0.15t_nx_n)\\
+	X_4=x_n-0.3(t_n+0.15)(x_n-0.15(t_n+0.15)(x_n-0.15t_nx_n))\\
+	x_{n+1}=x_n-0.3\left[\frac{1}{6}t_nX_1+\frac{1}{3}(t_n+0.15)X_2+\frac{1}{3}(t_n+0.15)X_3+\frac{1}{6}(t_n+0.3)X_4\right]
+\end{array}
+\right.$$\\
+$\Phi(t,x,h)$ est un polynôme (de degré 1) par rapport à sa deuxième variable (x), donc $\Phi$ est suffisamment régulière. On la suppose lipschitzienne par rapport à sa deuxième variable, le schéma est donc stable.\\
+
+\subsubsection{Ordre de consistance}
+Pour déterminer l'ordre de consistance et de convergence, et pour nous éviter l'aspect calculatoire, on s'intéresse à la quantité $max | x(t_n) - x_n |$. On sait que le schéma converge à l'ordre p si et seulement si $max | x(t_n) - x_n | \leq Kh^p$.\\
+Ainsi, la constante restant la même, $max | x(t_n) - x_n |$ varie comme $h^p$ quand h varie.\\
+
+On se propose donc de calculer cette quantité $max | x(t_n) - x_n |$ en faisant varier le nombre N de points calculés dans l'intervalle [0,T]: On rappelle que le pas h est donné par $h=\frac{(T-0)}{N}$, donc $h^p=\frac{T^p}{N^p}$.\\
+
+Les résultats observés pour les trois schémas sont réunis dans ce graphique:\\
+
+\begin{table}[h!]
+\begin{tabular}{cb{14cm}}
+\subfloat[Erreur absolue maximale en fonction de N (échelle logarithmique)]{\includegraphics[scale=0.40]{erreur.png}}
+\hspace{1cm}
+&
+\hspace{7mm} On remarque donc qu'à une constante près, $max | x(t_n) - x_n |$ varie comme $h^1$ pour le schéma d'Euler explicite, comme $h^2$ pour le schéma du point milieu, et comme $h^4$ pour le schéma de Runge-Kutta 4.
+On peut donc dire que le schéma d'Euler explicite converge à l'ordre 1, celui du point milieu à l'ordre 2, et celui de Runge-Kutta converge à l'ordre 4.\vspace{1cm}
+\\
+\end{tabular}
+\end{table}
+
+\subsubsection{Stabilité asymptotique}
+
+\subsection{}
+
+\section{Exercice 4 - Problème d'équation Proie-Prédateur}
+On considère le problème de Cauchy du modèle de Lotka-Volterra, avec $y_1$ et $y_2$ définies sur $\mathbb{R}^+$:
+$$
+(PP)
+\left \{
+\begin{array}{l}
+	y'_1(t)=1.2y_1-0.6y_1y_2\\
+	y'_2(t)=-0.8y_2+0.3y_1y_2\\
+	y_1(0)=2\\
+	y_2(0)=1\\
+\end{array}
+\right.$$\\
+\subsection{}
+
+\newpage
+\subsection{}
+
+On programme la fonction suivante, qu'on résoudra avec le solveur \textit{ode45()} de MatLab:\\
+ \\
+\texttt{function yp=predprey(t,y)\\
+yp=[1.2*y(1)-0.6*y(1)*y(2) ;-0.8*y(2)+0.3*y(1)*y(2)] ;}\\
+
+\texttt{[t,y]=ode45(@predprey, tspan, y0);} permet donc de récupérer deux listes t et y pour tracer un graphique des solutions:
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.5]{exo4EDOpredpreybis.png}
+\end{figure}
+
+\section{Exercice 5 - Contrôler les options d'intégration}
+\section{Exercice 6 - Matlab et les problèmes raides}
+
+\end{document}
