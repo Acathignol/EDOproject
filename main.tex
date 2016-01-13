@@ -389,30 +389,24 @@ yp=[1.2*y(1)-0.6*y(1)*y(2) ;-0.8*y(2)+0.3*y(1)*y(2)] ;}\\
 
 \section{Exercice 5 - Contrôler les options d'intégration}
 \section{Exercice 6 - Matlab et les problèmes raides}
-\begin{equation}
-ax^2+bx+c=0
-\end{equation}
-Le discriminant vaut $\Delta=b^2-4ac$. S’
-
-$x_2=\frac{-b+\sqrt\Delta}{2a}$
 
 $(VDP)$
 \[
 \left\{
 \begin{array}{ll}
-y''(t)-\mu(1-y^{2}(t))y'(t)+y(t)=0\\
-y(0)=y'(0)=1\\
+y_1''(t)-\mu(1-y_1^{2}(t))y_1'(t)+y_1(t)=0\\
+y_1(0)=y_1'(0)=1\\
 \end{array}
 \right.
 \]
 
-Soit $y'(t)=z(t)$, alors on obtiendra l'équation:
+Soit $y_1'(t)=y_2(t)$, alors on obtiendra l'équation:
 \[
 \left\{
 \begin{array}{ll}
-z'(t)-\mu(1-y^{2}(t))z(t)+y(t)=0\\
-z(t)=y'(t)\\
-y(0)=z(0)=1\\
+y_2(t)=y_1'(t)\\
+y_2'(t)-\mu(1-y_1^{2}(t))y_2(t)+y_1(t)=0\\
+y_1(0)=y_2(0)=1\\
 \end{array}
 \right.
 \]
@@ -421,9 +415,9 @@ Ce qui équivaut à:
 \[
 \left\{
 \begin{array}{ll}
-z'(t)=\mu(1-y^{2}(t))z(t)-y(t)\\
-y'(t)=z(t)\\
-y(0)=z(0)=1\\
+y_1'(t)=y_2(t)\\
+y_2'(t)=\mu(1-y_1^{2}(t))y_2(t)-y_1(t)\\
+y_1(0)=y_2(0)=1\\
 \end{array}
 \right.
 \]
