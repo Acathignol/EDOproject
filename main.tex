@@ -421,13 +421,82 @@ On programme la fonction suivante, qu'on résoudra avec le solveur \textit{ode45
 \texttt{function yp=predprey(t,y)\\
 yp=[1.2*y(1)-0.6*y(1)*y(2) ;-0.8*y(2)+0.3*y(1)*y(2)] ;}\\
  \\
- 
-\texttt{[t,y]=ode45(@predprey, tspan, y0);} permet donc de récupérer deux listes t et y pour tracer un graphique des solutions:
-\begin{figure}[h!]
-	\centering
-	\includegraphics[scale=0.7]{ex4_EDOpredpreybis.png}
-	\caption{Coévolution des populations de proies et prédateurs au cours du temps, en unités arbitraires}
-\end{figure}	
+\texttt{[t,y]=ode45(@predprey, tspan, y0);} permet donc de récupérer deux listes t et y grâce au solveur ode45() pour ensuite tracer un graphique des solutions.
+De plus, comme la commande renvoie sous le nom 'y' un tableau de deux colonnes (pour $y_1$ et $y_2$), chaque colonne contenant la valeur de l'effectif de la population à l'instant t correspondant à la ligne, on a \texttt{y(:,1)} la liste des valeurs de $y_1$ au cours du temps, et \texttt{y(:,2)} celle des valeurs de $y_2$. Donc la commande \texttt{plot(y(:,1),y(:,2));} nous trace $y_2$ en fonction de $y_1$, c'est à dire le portrait de phases du système dynamique:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ccl}
+\subfloat[Coévolution des populations de proies et prédateurs au cours du temps, en unités arbitraires]{\includegraphics[scale=0.5]{ex4_EDOpredpreybis.png}}
+&
+\subfloat[Portait de phases des populations $y_1$ et $y_2$.]{\includegraphics[scale=0.4]{ex4_EDOpredprey2.png}}
+\\
+\end{tabular}
+\end{table}	
+On remarque qu'il s'agit d'une configuration en \textbf{centres}: Les oscillations périodiques sont régulières, et le portrait de phases est une trajectoire fermée cyclique.\\
+Pour savoir si ce système dynamique donne des centres, et ceci quelques soient les paramètres, ou non, on procèdera à une étude analytique de ce système.
+\subsubsection{Etude Analytique}
+$$
+(PP)
+\left \{
+\begin{array}{l}
+	y'_1=1.2y_1-0.6y_1y_2\\
+	y'_2=-0.8y_2+0.3y_1y_2\\
+	y_1(0)=2\\
+	y_2(0)=1\\
+\end{array}
+\right.$$\\
+Les équilibres vérifient $y'_1=0$ et $y'_2=0$.\\
+Or, $y'_1=0\Leftrightarrow y_1=0$ ou $y_2=\frac{1.2}{0.6}=2$. De même, $y'_2=0\Leftrightarrow y_2=0$ ou $y_1=\frac{0.8}{0.3}=\frac{8}{3}$.\\
+
+Donc on a deux équilibres, en ${y_1 \choose y_2}={0 \choose 0}$ et ${2 \choose  8/3}$.Pour étudier leur stabilité, on linéarise le système au voisinage des points par un développement de Taylor d'ordre 1:\\
+Soit $
+A=
+\left(
+\begin{array}{cc}
+\frac{\partial y'_1}{y_1} & \frac{\partial y'_1}{y_2} \\
+\frac{\partial y'_2}{y_1} & \frac{\partial y'_2}{y_2} \\
+\end{array}
+\right)
+=
+\left(
+\begin{array}{cc}
+1.2-0.6y_2 & -0.6y_1 \\
+0.3y_2 & 0.3y_1-0.8 \\
+\end{array}
+\right)$ la matrice jakobienne du système. On pourra calculer sa valeur à chaque point d'équilibre, et en ces points, si $det(A|_{*})\neq0$, les portraits de phases de la linéarisation et du système sont topologiquement équivalents.
+\paragraph{Au point d'équilibre $(0,0)$ :}
+$A|_{(0,0)}=
+\left(
+\begin{array}{cc}
+1.2 & 0 \\
+0 & -0.8 \\
+\end{array}
+\right)$: On a deux valeurs propres réelles de signe opposé, $det(A|_{(0,0)})<0$, on peut donc dire que le point d'équilibre $(0,0)$ appartient à la classe d'équivalences topologiques des \textbf{points selles}.
+
+\paragraph{Au point d'équilibre $(\frac{8}{3},2)$ :}
+$A|_{\frac{8}{3},2}
+\left(
+\begin{array}{cc}
+0&-1.6 \\
+0.6&0 \\
+\end{array}
+\right)$: On remarque que les valeurs propres sont imaginaires pures. On a $det(A|_{(\frac{3}{8},2)})>0$ et $tr(A|_{(\frac{3}{8},2)})=0$, \textbf{la linéarisation prévoit donc des centres}, mais on ne peut rien conclure.\\
+
+On va chercher à vérifier l'existence de centres par une intégrale première. Posons:
+$$\frac{dy_2}{dy_1}=\frac{-0.8y_2+0.3y_1y_2}{1.2y_1-0.6y_1y_2}=\frac{y_2}{(1.2-0.6y_2)}\frac{(0.3y_1-0.8)}{y_1}$$
+$$\frac{(0.3y_1-0.8)}{y_1}dy_1=\frac{(1.2-0.6y_2)}{y_2}dy_2$$
+Intégrons, $y_1$ et $y_2$ étant positifs:
+$$0.3y_1-0.8ln(y_1)=1.2ln(y_2)-0.6y_2+cte$$
+Donc la fonction $H(y_1,y_2)=0.3y_1-0.8ln(y_1)-1.2ln(y_2)+0.6y_2$ est donc constante le long des trajectoires du portrait de phases, ses courbes de niveau seront les orbites du système.\\
+
+Approximons $H(y_1,y_2)$ pour $(y_1,y_2)$ proche de $(\frac{3}{8},2)$ par un développement de Taylor à l'ordre 2:
+$$H(y_1,y_2)\approx H(3/8,2)+\frac{\partial H}{\partial y_1}|_{(\frac{3}{8},2)}(y_1-\frac{3}{8})+\frac{\partial H}{\partial y_2}|_{(\frac{3}{8},2)}(y_2-2)+\frac{\partial^2 H}{\partial y_1^2}|_{(\frac{3}{8},2)}\frac{(y_1-\frac{3}{8})^2}{2!}+\frac{\partial^2 H}{\partial y_2^2}|_{(\frac{3}{8},2)}\frac{(y_2-2)^2}{2!}+\frac{\partial^2 H}{\partial y_2\partial y_1}|_{(\frac{3}{8},2)}(y_1-\frac{3}{8})(y_2-2)$$
+Ce qui se réduit, quand on calcule, à 
+$$H(y_1,y_2)\approx H(3/8,2)-\left[\frac{0.3^2}{2*0.8}(y_1-\frac{3}{8})^2+\frac{0.6^2}{2*1.2}(y_2-2)^2\right]$$
+$$H(y_1,y_2)\approx 1.26-\left[0.056(y_1-\frac{3}{8})^2+0.15(y_2-2)^2\right]$$
+Il s'agit de l'équation d'un paraboloïde centré sur $(\frac{3}{8},2)$. Ainsi, à proximité du point d'équilibre, les courbes de niveau de H sont bien fermées, et donc les orbites du système aussi, donc \textbf{on a bien de réels centres}. la simulation obtenue sur Matlab est cohérente.
+
 
 \section{Exercice 5 - Contrôler les options d'intégration}
 \section{Exercice 6 - Matlab et les problèmes raides}
