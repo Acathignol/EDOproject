@@ -343,6 +343,7 @@ On peut donc dire que le schéma d'Euler explicite converge à l'ordre 1, celui 
 
 \subsubsection{Stabilité asymptotique}
 On applique le Test Linéaire Standard (TLS) aux schémas, et on observe le comportement asymptotique des trajectoires.
+
 $$
 (TLS)
 \left \{
@@ -352,14 +353,47 @@ x(0)=x_0\\
 \end{array}
 \right.
 $$
+\begin{table}[h!]
+\centering
+\begin{tabular}{ccl}
+\subfloat[Comportement asymptotique pour une condition (L,h)=(3,$\frac{1}{2}$) donnée]{\includegraphics[scale=0.40]{ex3_TLS-1.png}}
+&
+\subfloat[Comportement asymptotique pour une autre condition (L=5)]{\includegraphics[scale=0.40]{ex3_TLS-2.png}}
+&
+\subfloat[Comportement asymptotique pour une autre condition (L=8,h=1)]{\includegraphics[scale=0.40]{ex3_TLS-3.png}}
+\\
+\end{tabular}
+\end{table}
 
-\paragraph{Pour Euler Explicite:}
-On app
+On voit que dans les 3 cas, h est soumis à conditions par rapport à L: Les schémas ne sont donc pas inconditionnellement stables. Cherchons les conditions sur h pour que le schéma soit A-stable:
+\newpage
+\paragraph{pour Euler Explicite:}
+On obtient donc la suite $x_{n+1}=x_n-hLx_n=x_n(1-hL)$ donc on peut montrer par récurrence que $x_{n}=x_0 (1-hL)^{n}$. Le schéma est A-stable si $x_n$ tend vers 0 quand n tend vers l'infini, c'est à dire si et seulement si:\\
+$$-1<1-hL<1$$
+$$-2<-hL<0$$
+$$0<hL<2$$
+$$h<2/L$$ 
+Le schéma n'est A-stable que pour $h<\frac{2}{L}$.
 
+
+\paragraph{pour le Point Milieu:}
+En procédant de la même façon, on obtient la suite $x_{n+1}=x_n(1-Lh+L^2h)$. Par récurrence, on peut montrer que $x_n=x_0(1-Lh+L^2h)^n$. Le schéma est donc A-stable uniquement si:
+$$-1<1-Lh+L^2h<1$$
+$$-2<-Lh+L^2h<0$$
+$$-2<h(L^2-L)<0$$
+h étant positif, la condition $h(L^2-L)<0$ n'est vraie que pour $L\in[0,1]$. Donc le schéma est A-stable pour $h<\frac{-2}{L^2-L}$ avec $L\in[0,1]$.
+
+\paragraph{pour Runge-Kutta 4:}
+La suite est plus complexe, mais le même principe peut être appliqué:\\ $x_{n+1}=x_n(1-\frac{hL}{6}(2-hL(1-\frac{h}{2}L(1-\frac{h}{2}L)))-\frac{hL}{3}(2-\frac{h}{2}L-\frac{h}{2}L(1-\frac{h}{2}L)))$ donc on peut écrire $x_n=x_0\times K(h,L)^n$ où $K(h,L)$ est un polynôme de degré 4, donc non entièrement inclus dans l'intervalle $[-1,1]$, donc la stabilité asymptotique est bien soumise à conditions sur h et L.
+
+
+Donc les trois schémas ne sont pas inconditionnellement stables, on devra soit faire attention aux pas de temps h choisis, soit préférer utiliser un schéma implicite.
 
 \subsection{}
 
+\newpage
 \section{Exercice 4 - Problème d'équation Proie-Prédateur}
+
 On considère le problème de Cauchy du modèle de Lotka-Volterra, avec $y_1$ et $y_2$ définies sur $\mathbb{R}^+$:
 $$
 (PP)

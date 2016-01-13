@@ -70,10 +70,10 @@ def solutionTLS(t):
 	return x0*exp(-L*t)
 
 
-L=3
+L=8
 I=0
 T=10
-h=0.5
+h=1
 x0=2
 
 t, eulerexpl = eulerExpl( TLS , [I,T] , h , x0 )
@@ -86,7 +86,7 @@ plt.plot(tt,sol,'y',label='Solution Exacte')
 plt.plot(t,eulerexpl,'r',label='Euler Explicite')
 plt.plot(t,pointmilieu, 'g',label='Point Milieu')
 plt.plot(t,rk, 'b' , label='Runge-Kutta 4')
-plt.title('Test Lineaire Standard, h=0.5, L=3')
+plt.title('Test Lineaire Standard, h=1, L=8')
 plt.xlabel('t')
 plt.legend(loc=1)
 plt.ylabel('x(t)')
