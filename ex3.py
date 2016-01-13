@@ -1,4 +1,4 @@
-from edosch import *
+from schemedo import *
 from numpy import linspace
 import matplotlib.pyplot as plt
 from math import exp
@@ -71,24 +71,22 @@ def solutionTLS(t):
 
 
 L=3
-I=1
-T=100
-h=1
-x0=8
+I=0
+T=10
+h=0.5
+x0=2
 
 t, eulerexpl = eulerExpl( TLS , [I,T] , h , x0 )
 t, pointmilieu = pointMilieu( TLS , [I,T] , h , x0 )
 t, rk= RK4( TLS , [I,T] , h , x0 )
-tt=range(I,T,h)
+tt=linspace(I,T,200)
 sol=map(solutionTLS,tt)
-
-print eulerexpl
 
 plt.plot(tt,sol,'y',label='Solution Exacte')
 plt.plot(t,eulerexpl,'r',label='Euler Explicite')
 plt.plot(t,pointmilieu, 'g',label='Point Milieu')
 plt.plot(t,rk, 'b' , label='Runge-Kutta 4')
-plt.ylim(0,x0+100)
+plt.title('Test Lineaire Standard, h=0.5, L=3')
 plt.xlabel('t')
 plt.legend(loc=1)
 plt.ylabel('x(t)')

@@ -190,7 +190,7 @@ Donc par le théorème de LAX, le schéma est convergent d'ordre au moins 1 vers
 Ici, $\Phi(t,y,h)$ est de classe $C^2$. Donc $\Phi$ est lipschitzienne par rapport à sa deuxième variable, donc le schéma est stable à l'ordre 2 également.\\
 Cette fois par contre, $\frac{\partial \Phi}{\partial h} (t,y,0)=0 \neq \frac{1}{2}Df(t,y)$, donc le schéma n'est pas consistant à l'ordre 2.\\
 %\begin{wrapfigure}[1]{r}{10cm}
-%	\includegraphics[scale=0.45]{figure_1.png}
+%	\includegraphics[scale=0.45]{ex2.png}
 %	\caption{Comparaison entre méthode numérique et solution réelle sur l'intervalle [0,4]}
 %\end{wrapfigure}
 Donc le schéma n'est convergent que d'ordre 1.
@@ -332,7 +332,7 @@ Les résultats observés pour les trois schémas sont réunis dans ce graphique:
 
 \begin{table}[h!]
 \begin{tabular}{cb{14cm}}
-\subfloat[Erreur absolue maximale en fonction de N (échelle logarithmique)]{\includegraphics[scale=0.40]{erreur.png}}
+\subfloat[Erreur absolue maximale en fonction de N (échelle logarithmique)]{\includegraphics[scale=0.40]{ex3_erreur.png}}
 \hspace{1cm}
 &
 \hspace{7mm} On remarque donc qu'à une constante près, $max | x(t_n) - x_n |$ varie comme $h^1$ pour le schéma d'Euler explicite, comme $h^2$ pour le schéma du point milieu, et comme $h^4$ pour le schéma de Runge-Kutta 4.
@@ -342,6 +342,9 @@ On peut donc dire que le schéma d'Euler explicite converge à l'ordre 1, celui 
 \end{table}
 
 \subsubsection{Stabilité asymptotique}
+
+
+
 
 \subsection{}
 
@@ -370,7 +373,7 @@ yp=[1.2*y(1)-0.6*y(1)*y(2) ;-0.8*y(2)+0.3*y(1)*y(2)] ;}\\
 \texttt{[t,y]=ode45(@predprey, tspan, y0);} permet donc de récupérer deux listes t et y pour tracer un graphique des solutions:
 \begin{figure}[h!]
 	\centering
-	\includegraphics[scale=0.5]{exo4EDOpredpreybis.png}
+	\includegraphics[scale=0.5]{ex4_EDOpredpreybis.png}
 \end{figure}
 
 \section{Exercice 5 - Contrôler les options d'intégration}
