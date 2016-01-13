@@ -26,12 +26,10 @@ $\vdots$ \\
 $\frac{\partial^{p-1}\Phi}{\partial h^{p-1}} (t,x,0) = \frac{1}{p}D^{p-1}f(t,x)$ , \\
 \end{center}
 
-En effet, 
 
 \subsection{Résultat 2}
 {\it \bf Pour qu’un schéma de Runge-Kutta explicite à un pas soit au-moins d’ordre 2, il faut et il suffit que les points $b_{i}$, les poids intermédiaires $a_{i,j}$ et les paramètres $c_{i}$ (i, j variant de 1 à s) vérifient:} $$\sum_{i=1}^{s}b_{i}c_{i} = \frac{1}{2} \; \textrm{   d'une part, et d'autre part   } \; \sum_{i=1}^{s}b_{i}(\sum_{j=1}^{i-1}a_{i,j})= \frac{1}{2}$$
 
-En effet,
 
 \section{Exercice 1 - Problème raide}
 On considère le problème de Cauchy suivant :
@@ -407,19 +405,29 @@ $$
 \right.$$\\
 \subsection{}
 
-\newpage
+L'évolution des proies à chaque génération est la différence de l'augmentation naturelle des proies par reproduction (soit ici +$1.2y_1$), qui est toujours positive ou nulle, et du nombre de proies mangées pendant la génération (à cause des prédateurs).\\
+
+La réponse fonctionnelle (\textit{le nombre de proies mangées par prédateur et par unité de temps}) est dépendante du nombre de proies. Ici elle est de $0,6y_1$ proies/prédateur/temps, c'est une réponse fonctionnelle de Holling de type I.\\
+
+L'évolution des prédateurs est la diminution naturelle exponentielle s'il n'y a pas de proies (les prédateurs meurent par manque de nourriture), additionnée de l'influence positive qu'apporte l'interaction des populations Proies-Prédateurs aux prédateurs.\\
+
+Donc $y_1$ représente la population de proies et $y_2$ celles des prédateurs.
+
 \subsection{}
 
 On programme la fonction suivante, qu'on résoudra avec le solveur \textit{ode45()} de MatLab:\\
  \\
+ \\ 
 \texttt{function yp=predprey(t,y)\\
 yp=[1.2*y(1)-0.6*y(1)*y(2) ;-0.8*y(2)+0.3*y(1)*y(2)] ;}\\
-
+ \\
+ 
 \texttt{[t,y]=ode45(@predprey, tspan, y0);} permet donc de récupérer deux listes t et y pour tracer un graphique des solutions:
 \begin{figure}[h!]
 	\centering
-	\includegraphics[scale=0.5]{ex4_EDOpredpreybis.png}
-\end{figure}
+	\includegraphics[scale=0.7]{ex4_EDOpredpreybis.png}
+	\caption{Coévolution des populations de proies et prédateurs au cours du temps, en unités arbitraires}
+\end{figure}	
 
 \section{Exercice 5 - Contrôler les options d'intégration}
 \section{Exercice 6 - Matlab et les problèmes raides}
