@@ -3,6 +3,8 @@ from numpy import linspace
 import matplotlib.pyplot as plt
 from math import exp
 
+#Partie 1: Etude de la convergence
+
 def f(t,x):
 	return -t*x
 
@@ -34,22 +36,6 @@ for N in Nrange:
 	errrk.append(max(map(diff , rk , map(solution,t))))
 	
 	
-	
-	
-	'''
-	plt.plot(t, eulerexpl , 'r-' , label='Euler Explicite')
-	plt.plot(t, pointmilieu , 'g--' , label='Point Milieu')
-	plt.plot(t, rk , 'b' , label='Runge-Kutta 4')
-	plt.plot(tt, map(solution, tt) , 'y' , label='Solution exacte')
-	plt.xlim(I)
-	plt.ylim(0,x0+2)
-	plt.xlabel('t (temps)')
-	plt.ylabel('solution x(t)')
-	plt.legend()
-	plt.title('Etude de differents schemas ( f(t,x)=-tx )')
-	plt.show()
-	'''
-
 plt.plot(Nrange,erreulerexpl,'r.',label='Euler Explicite')
 plt.plot(Nrange,errpointmilieu, 'g.',label='Point Milieu')
 plt.plot(Nrange,errrk, 'b.' , label='Runge-Kutta 4')
@@ -71,4 +57,39 @@ plt.yscale('log')
 plt.xlabel('N')
 plt.ylabel('Erreur absolue max')
 plt.legend(loc=2)
+plt.show()
+
+
+#Partie 2: Etude de la stabilite asymptotique
+
+
+def TLS(t,x):
+	return -L*x
+
+def solutionTLS(t):
+	return x0*exp(-L*t)
+
+
+L=3
+I=1
+T=100
+h=1
+x0=8
+
+t, eulerexpl = eulerExpl( TLS , [I,T] , h , x0 )
+t, pointmilieu = pointMilieu( TLS , [I,T] , h , x0 )
+t, rk= RK4( TLS , [I,T] , h , x0 )
+tt=range(I,T,h)
+sol=map(solutionTLS,tt)
+
+print eulerexpl
+
+plt.plot(tt,sol,'y',label='Solution Exacte')
+plt.plot(t,eulerexpl,'r',label='Euler Explicite')
+plt.plot(t,pointmilieu, 'g',label='Point Milieu')
+plt.plot(t,rk, 'b' , label='Runge-Kutta 4')
+plt.ylim(0,x0+100)
+plt.xlabel('t')
+plt.legend(loc=1)
+plt.ylabel('x(t)')
 plt.show()
