@@ -454,7 +454,7 @@ $$
 Les équilibres vérifient $y'_1=0$ et $y'_2=0$.\\
 Or, $y'_1=0\Leftrightarrow y_1=0$ ou $y_2=\frac{1.2}{0.6}=2$. De même, $y'_2=0\Leftrightarrow y_2=0$ ou $y_1=\frac{0.8}{0.3}=\frac{8}{3}$.\\
 
-Donc on a deux équilibres, en ${y_1 \choose y_2}={0 \choose 0}$ et ${2 \choose  8/3}$.Pour étudier leur stabilité, on linéarise le système au voisinage des points par un développement de Taylor d'ordre 1:\\
+Donc \textbf{on a deux équilibres, en ${y_1 \choose y_2}={0 \choose 0}$ et ${2 \choose  8/3}$}. Pour étudier leur stabilité, on linéarise le système au voisinage des points par un développement de Taylor d'ordre 1:\\
 Soit $
 A=
 \left(
@@ -500,9 +500,13 @@ $$H(y_1,y_2)\approx H(3/8,2)+\frac{\partial H}{\partial y_1}|_{(\frac{3}{8},2)}(
 Ce qui se réduit, quand on calcule, à 
 $$H(y_1,y_2)\approx H(3/8,2)-\left[\frac{0.3^2}{2*0.8}(y_1-\frac{3}{8})^2+\frac{0.6^2}{2*1.2}(y_2-2)^2\right]$$
 $$H(y_1,y_2)\approx 1.26-\left[0.056(y_1-\frac{3}{8})^2+0.15(y_2-2)^2\right]$$
-Il s'agit de l'équation d'un paraboloïde centré sur $(\frac{3}{8},2)$. Ainsi, à proximité du point d'équilibre, les courbes de niveau de H sont bien fermées, et donc les orbites du système aussi, donc \textbf{on a bien de réels centres}. la simulation obtenue sur Matlab est cohérente.
+Il s'agit de l'équation d'un paraboloïde centré sur $(\frac{3}{8},2)$. Ainsi, à proximité du point d'équilibre, les courbes de niveau de H sont bien fermées, et donc les orbites du système aussi, donc \textbf{on a bien de réels centres}. la simulation obtenue sur Matlab est cohérente.\\
 
+\textbf{Le centre a pour coordonnées ${\frac{0.8}{0.3} \choose \frac{1.2}{0.6}}$ donc il dépend directement des paramètres du système.} Cependant, le centre existe tant que ces paramètres ont ces signes, donc changer leur valeur ne suffit pas à modifier la stabilité du point d'équilibre.\\
+On pourrait les faire changer de signe ou les annuler, mais cette fois, on ne modéliserait plus la cohabitation entre Proies et Prédateurs \textit{(on modéliserait du commensalisme, mutualisme, ou d'autres formes d'interactions)}.\\
 
+On peut cependant chercher à modifier la réponse fonctionnelle pour changer l'équilibre:\\
+Si l'on considère que le nombre de proies mangées par prédateur tend vers un maximum asymptotique, on ne modélise plus l'effet de l'interaction par les termes  $-0.6y_1y_2$ et $+0.3y_1y_2$, mais par $-\frac{0.6y_1y_2}{1+0.6y_1}$ et $+\frac{0.3y_1y_2}{1+0.6y_1}$:
 \section{Exercice 5 - Contrôler les options d'intégration}
 \section{Exercice 6 - Matlab et les problèmes raides}
 
