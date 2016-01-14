@@ -560,36 +560,38 @@ On obtient alors un foyer asymptotiquement stable, ce qui est beaucoup plus plau
 \section{Exercice 5 - Contrôler les options d'intégration}
 \section{Exercice 6 - Matlab et les problèmes raides}
 
-$(VDP)$
-\[
+Considérons l'oscillateur entretenu de Van der Pol:
+\[(VDP)
 \left\{
 \begin{array}{ll}
-y_1''(t)-\mu(1-y_1^{2}(t))y_1'(t)+y_1(t)=0\\
-y_1(0)=y_1'(0)=1\\
+y''(t)-\mu(1-y^{2}(t))y'(t)+y(t)=0\\
+y(0)=y'(0)=1\\
 \end{array}
 \right.
 \]
+\subsection{}
+Posons $y=y_1$ et $y'=y_2$.
+On obtient le système d'équations:
 
-Soit $y_1'(t)=y_2(t)$, alors on obtiendra l'équation:
 \[
 \left\{
 \begin{array}{ll}
-y_2(t)=y_1'(t)\\
-y_2'(t)-\mu(1-y_1^{2}(t))y_2(t)+y_1(t)=0\\
+y_1'=y_2\\
+y_2'=\mu(1-y_1^{2})y_2-y_1\\
 y_1(0)=y_2(0)=1\\
 \end{array}
 \right.
 \]
-
-Ce qui équivaut à:
-\[
-\left\{
-\begin{array}{ll}
-y_1'(t)=y_2(t)\\
-y_2'(t)=\mu(1-y_1^{2}(t))y_2(t)-y_1(t)\\
-y_1(0)=y_2(0)=1\\
-\end{array}
-\right.
-\]
+\subsection{}
+On résout le système précédent dans Matlab avec le solveur \texttt{ode45()}, pour $\mu =1$ et $t \in [0,20]$:
+\begin{table}[h!]
+\centering
+\begin{tabular}{ccl}
+\subfloat[Solutions $y_1$ et $y_2$, avec \texttt{ode45()}.]{\includegraphics[scale=0.7]{ex4_ultimate3.png}}
+&
+\subfloat[Portrait de phases.]{\includegraphics[scale=0.7]{ex4_ultimate.png}}
+\\
+\end{tabular}
+\end{table}\\	
 
 \end{document}
