@@ -509,21 +509,54 @@ On pourrait les faire changer de signe ou les annuler, mais cette fois, on ne mo
 \newpage
 \subsubsection{Tentative de modification}
 On peut cependant chercher à modifier la réponse fonctionnelle pour changer l'équilibre:\\
-Si l'on considère que le nombre de proies mangées par prédateur tend vers un maximum asymptotique, on ne modélise plus l'effet de l'interaction par les termes  $-0.6y_1y_2$ et $+0.3y_1y_2$, mais par $-\frac{0.6y_1y_2}{1+0.6y_1}$ et $+\frac{0.3y_1y_2}{1+0.6y_1}$:
+Si l'on considère que le nombre de proies mangées par prédateur tend vers un maximum asymptotique, on ne modélise plus l'effet de l'interaction par les termes  $-0.6y_1y_2$ et $+0.3y_1y_2$, mais par $-\frac{0.6y_1y_2}{1+0.6y_1}$ et $+\frac{0.6y_1y_2}{1+0.6y_1}$:
 $$
-(PP)
+(PP')
 \left \{
 \begin{array}{l}
 	y'_1=1.2y_1-\frac{0.6y_1y_2}{1+0.6hy_1}\\
-	y'_2=-0.8y_2+\frac{0.3y_1y_2}{1+0.6hy_1}\\
+	y'_2=-0.8y_2+\frac{0.6y_1y_2}{1+0.6hy_1}\\
 	y_1(0)=2\\
 	y_2(0)=1\\
 \end{array}
 \right.$$
-\begin{figure}[h!]
-\includegraphics[scale=0.5]{ex4_Holling2.png}
-\end{figure}
-Le terme d'interaction entre les populations tend asymptotiquement vers un maximum.
+Cette fois, le point d'équilibre est un foyer instable \textit{(On a pris ici h=50)} :\\
+\begin{table}[h!]
+\centering
+\begin{tabular}{ccl}
+\subfloat[le nombres de proies mangées par un prédateur par unité de temps tend vers un maximum $\frac{1}{h}$.]{\includegraphics[scale=0.4]{ex4_Holling2.png}}
+&
+\subfloat[Solutions $y_1$ et $y_2$.]{\includegraphics[scale=0.6]{ex4_Holling.png}}
+&
+\subfloat[Chroniques des populations $y_1$ et $y_2$.]{\includegraphics[scale=0.6]{ex4_EDOpredprey3.png}}
+\\
+\end{tabular}
+\end{table}\\	
+Cependant, ce modèle n'est pas bien réaliste, puisque les populations ne supporteraient pas ces variations de plus en plus extrêmes. \\
+
+Il sera plus plausible de compléter encore l'équation avec une croissance logistique pour les proies: En absence de prédateurs, leur croissance n'est ainsi pas infinie: 
+$$
+(PP')
+\left \{
+\begin{array}{l}
+	y'_1=1.2y_1(1-\frac{y_1}{K})-\frac{0.6y_1y_2}{1+0.6hy_1}\\
+	y'_2=-0.8y_2+\frac{0.6y_1y_2}{1+0.6hy_1}\\
+	y_1(0)=2\\
+	y_2(0)=1\\
+\end{array}
+\right.$$
+\textit{Avec un milieu capable d'accueillir K=300 individus max, et h=5} :\\
+\begin{table}[h!]
+\centering
+\begin{tabular}{ccl}
+\subfloat[Solutions $y_1$ et $y_2$.]{\includegraphics[scale=0.7]{ex4_ultimate3.png}}
+&
+\subfloat[Portrait de phases.]{\includegraphics[scale=0.7]{ex4_ultimate.png}}
+\\
+\end{tabular}
+\end{table}\\	
+On obtient alors un foyer asymptotiquement stable, ce qui est beaucoup plus plausible écologiquement parlant.
+\newpage
 \section{Exercice 5 - Contrôler les options d'intégration}
 \section{Exercice 6 - Matlab et les problèmes raides}
 
