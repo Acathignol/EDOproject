@@ -1,6 +1,6 @@
-tspan=[0 20]
-h=0.5
-y0=2
+tspan=[0 50]
+h=1
+y0=4
 
 [t, y] = EulExp('ex3_dydt', tspan, y0, h) ;
 disp([t, y])
