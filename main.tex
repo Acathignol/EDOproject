@@ -38,6 +38,71 @@ $\frac{\partial^{p-1}\Phi}{\partial h^{p-1}} (t,x,0) = \frac{1}{p}D^{p-1}f(t,x)$
 {\it \bf Pour qu’un schéma de Runge-Kutta explicite à un pas soit au-moins d’ordre 2, il faut et il suffit que les points $b_{i}$, les poids intermédiaires $a_{i,j}$ et les paramètres $c_{i}$ (i, j variant de 1 à s) vérifient:} $$\sum_{i=1}^{s}b_{i}c_{i} = \frac{1}{2} \; \textrm{   d'une part, et d'autre part   } \; \sum_{i=1}^{s}b_{i}(\sum_{j=1}^{i-1}a_{i,j})= \frac{1}{2}$$
 
 
+On sait que : \begin{equation}
+\phi(t_n,x_n,h_n)=\Sigma^{s}_{i=1} b_i f(t_n+c_i h_n,x_i)
+\end{equation}
+Et \begin{equation}
+\frac{\delta}{\delta h}\phi(t,x,0)=\frac{1}{2}Df(t,x)
+\end{equation}
+Et, $x_i=x_n+h_n\Sigma^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,x_j)$ .\\
+Alors:\begin{equation}
+\frac{\delta x_i}{\delta h}=\frac{\delta}{\delta h}(x_n+h_n\Sigma^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,x_j))
+\end{equation}
+\begin{equation}
+\Leftrightarrow \frac{\delta x_i}{\delta h}=\Sigma^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,x_j))
+\end{equation}
+
+De plus:
+\begin{equation}
+\frac{\delta}{\delta h}[b_if(t_n+c_ih_n,x_i)] = b_i \frac{\delta}{\delta h}f(t_n+c_ih_n,x_i)
+\end{equation}
+\begin{equation}
+\Leftrightarrow \frac{\delta}{\delta h}[b_if(t_n+c_ih_n,x_i)]= b_i (\frac{\delta f}{\delta (t_n+c_ih_n)}(PUT)\frac{\delta (t_n+c_ih_n)}{\delta h}+\frac{\delta f}{\delta x_i}(PUT) \frac{\delta x_i}{\delta h})
+\end{equation}
+\begin{equation}
+\Leftrightarrow \frac{\delta}{\delta h}[b_if(t_n+c_ih_n,x_i)]= b_i (\frac{\delta f}{\delta (t_n+c_ih_n)}(PUT)c_i+\frac{\delta f}{\delta x}(PUT) \frac{\delta x_i}{\delta h})
+\end{equation}
+
+
+Donc, comme $\phi(t_n,x_n,h_n)=\Sigma^{s}_{i=1} b_i f(t_n+c_i h_n,x_i)$,
+on obtient \\
+\\
+$ \frac{\delta}{\delta h}\phi(t_n,x_n,h_n) = \frac{\delta}{\delta h}[\Sigma^{s}_{i=1} b_i f(t_n+c_i h_n,x_i)]\\
+\\
+\Leftrightarrow \frac{\delta}{\delta h}\phi(t_n,x_n,h_n) = (\Sigma^{s}_{i=1} b_ic_i) \frac{\delta f}{\delta (t_n+c_ih_n)}(PUT) + [\Sigma^{s}_{i=1} b_i(\Sigma^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,x_j))]  \frac{\delta f}{\delta x}\\ $
+\\
+Donc, si $h_n=0$ :
+\begin{equation}
+\frac{\delta}{\delta h}\phi(t_n,x_n,0) = (\Sigma^{s}_{i=1} b_ic_i) \frac{\delta f}{\delta t}(t,x) + [\Sigma^{s}_{i=1} b_i(\Sigma^{i-1}_{j=1} a_{i,j})] f(t,x) \frac{\delta f}{\delta x}(t,x)
+\end{equation}
+Soit $Df(t,x)=\frac{\delta f}{\delta t}(t,x)+f(t,x) \frac{\delta f}{\delta x}(t,x)$.\\
+Et, on sait que $\frac{\delta}{\delta h}\phi(t,x,0)=\frac{1}{2}Df(t,x)$.\\
+\begin{equation}
+\Leftrightarrow \frac{\delta}{\delta h}\phi(t,x,0) = \frac{1}{2}\frac{\delta f}{\delta t}(t,x)+\frac{1}{2}f(t,x) \frac{\delta f}{\delta x}(t,x)
+\end{equation}
+$\Leftrightarrow$\[
+\left\{
+\begin{array}{ll}
+\Sigma^{s}_{i=1} b_ic_i = \frac{1}{2} \\
+\Sigma^{s}_{i=1} b_i(\Sigma^{i-1}_{j=1} a_{i,j}) = \frac{1}{2}\\
+\end{array}
+\right.
+\]
+
+Donc, pour un modèle de Runge-Kutta explicite à un pas soit au-moins d’ordre 2, il faut et
+il suffit que les points $b_i$ , les poids intermédiaires $a_{i,j}$ et les paramètres $c_i$ $(i, j = 1, ..., s)$
+vérifient toutes les conditions suivantes: 
+\[
+\left\{
+\begin{array}{ll}
+\Sigma^{s}_{i=1} b_ic_i = \frac{1}{2} \\
+\Sigma^{s}_{i=1} b_i(\Sigma^{i-1}_{j=1} a_{i,j}) = \frac{1}{2}\\
+\end{array}
+\right.
+\]
+
+
+
 \section{Exercice 1 - Problème raide}
 On considère le problème de Cauchy suivant :
 trouver $u \in C^{1}([0,1], \mathbb{R} )$ telle que
