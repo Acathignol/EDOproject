@@ -549,18 +549,23 @@ $$
 \begin{table}[h!]
 \centering
 \begin{tabular}{ccl}
-\subfloat[Solutions $y_1$ et $y_2$.]{\includegraphics[scale=0.7]{ex4_ultimate3.png}}
+\subfloat[Solutions $y_1$ \textit{(bleu)} et $y_2$ \textit{(rouge)}.]{\includegraphics[scale=0.5]{ex4_ultimate3.png}}
 &
-\subfloat[Portrait de phases.]{\includegraphics[scale=0.7]{ex4_ultimate.png}}
+\subfloat[Portrait de phases]{\includegraphics[scale=0.5]{ex4_ultimate.png}}
+&
+\subfloat[Chronique des populations]{\includegraphics[scale=0.5]{ex4_ultimate2.png}}
 \\
 \end{tabular}
 \end{table}\\	
 On obtient alors un foyer asymptotiquement stable, ce qui est beaucoup plus plausible écologiquement parlant.
 \newpage
 \section{Exercice 5 - Contrôler les options d'intégration}
+\newpage
 \section{Exercice 6 - Matlab et les problèmes raides}
 
-Considérons l'oscillateur entretenu de Van der Pol:
+\subsection{}
+Considérons l'oscillateur entretenu de Van der Pol, et posons $y=y_1$ et $y'=y_2$.
+On obtient le système d'équations:
 \[(VDP)
 \left\{
 \begin{array}{ll}
@@ -568,12 +573,7 @@ y''(t)-\mu(1-y^{2}(t))y'(t)+y(t)=0\\
 y(0)=y'(0)=1\\
 \end{array}
 \right.
-\]
-\subsection{}
-Posons $y=y_1$ et $y'=y_2$.
-On obtient le système d'équations:
-
-\[
+\Rightarrow
 \left\{
 \begin{array}{ll}
 y_1'=y_2\\
@@ -586,12 +586,369 @@ y_1(0)=y_2(0)=1\\
 On résout le système précédent dans Matlab avec le solveur \texttt{ode45()}, pour $\mu =1$ et $t \in [0,20]$:
 \begin{table}[h!]
 \centering
-\begin{tabular}{ccl}
-\subfloat[Solutions $y_1$ et $y_2$, avec \texttt{ode45()}.]{\includegraphics[scale=0.7]{ex4_ultimate3.png}}
+\begin{tabular}{ccc}
+\subfloat[Solutions $y_1$ et $y_2$, avec \texttt{ode45()}.]{\includegraphics[scale=0.5]{exo6_2_a.png}}
 &
-\subfloat[Portrait de phases.]{\includegraphics[scale=0.7]{ex4_ultimate.png}}
+\subfloat[Portrait de phases pour différentes valeurs de $\mu$]{\includegraphics[scale=0.5]{exo6_3_portrait.png}}
+&
+\subfloat[$y_2$ n'étant que la dérivée de $y_1$, elle ne nous intéresse pas.]{\includegraphics[scale=0.5]{exo6_2_a_1.png}}
 \\
 \end{tabular}
-\end{table}\\	
+\end{table}\\
+On obtient un portrait de phases en centres, et donc bien des solutions y en forme d'oscillations régulières.\\
+\newpage
+Matlab comprend plusieurs algorithmes d'approche numérique de solutions d'équations différentielles, suivant divers schémas de Runge-Kutta à pas de temps adaptatifs. Essayons de comparer, pour $\mu =1000$ et $t \in [0,6000]$, les solutions trouvées par \texttt{ode23s()} et \texttt{ode45()}:
+\begin{table}[h!]
+\centering
+\begin{tabular}{cc}
+\subfloat[Solution $y$ avec \texttt{ode23s()}.]{\includegraphics[scale=0.7]{exo6_2_b_1.png}}
+&
+\subfloat[Solution $y$ avec \texttt{ode45()}.]{\includegraphics[scale=0.7]{exo6_2_c_1.png}}
+\\
+\end{tabular}
+\end{table}\\
 
+Conclusion: Pour obtenir exactement la même chose, \texttt{ode45()} utilise un temps de calcul 100 fois plus long. Comment l'expliquer ? Le problème étant très raide de façon périodique, les solveurs à pas de temps adaptatifs vont périodiquement devoir utiliser des pas $h$ minuscules pour que l'erreur entre les deux schémas (Runge-Kutta 2 et 3 pour \texttt{ode23s()}, Runge-Kutta 4 et 5 pour \texttt{ode45()}) reste inférieure au seuil que s'autorise Matlab.\\
+Les schémas de Runge-Kutta 4 et 5 étant bien plus précis, l’exigence sur $h$ est plus grande ($h$ est donc pris encore plus petit qu'avec R-K 2 et 3), et donc Matlab devra réaliser plus d'itérations pour parcourir le même intervalle, et donc mettra plus de temps.\\
+
+On remarque également que $\mu$ modifie la période des oscillations, qui a effectivement été multipliée par 1000. On pourrait étudier l'effet de $\mu$ sur la période avec un graphique en 3 dimensions:
+\begin{table}
+\centering
+\begin{tabular}{c}
+\subfloat[Chronique de $y$ avec \texttt{ode23s()} avec un pas de 1 pour $\mu$]{\includegraphics[scale=0.7]{exo6_3_pasde1_6.png}}
+\\
+\end{tabular}
+\end{table}
+\begin{table}
+\begin{tabular}{l}
+Ou même, pour y voir plus clair, avec un pas de 20 pour $\mu \in [0,1000]$:\\
+\end{tabular}
+\\
+\begin{tabular}{cc}
+\subfloat[Chronique de $y$ avec \texttt{ode23s()}.]{\includegraphics[scale=0.5]{exo6_3_1.png}}
+&
+\subfloat[Chronique de $y$ avec \texttt{ode45()}.]{\includegraphics[scale=0.5]{exo6_3_ode45_9.png}}
+\\
+\end{tabular}
+\end{table}
+
+\newpage
+\section{Annexe: Codes utilisés (Python 2.7 et MatLab)}
+Fichier python contenant des fonctions de schémas numériques à appeler dans les programmes des exercices:\\
+
+\textbf{File: \texttt{schemedo.py}}
+\begin{tiny}
+\begin{verbatim}
+from numpy import arange,ones
+from matplotlib.pyplot import plot
+
+def error(approx,exact):
+        return abs(approx-exact)/float(exact)*100
+
+def diff(approx,exact):
+        return abs(approx-exact)
+
+def eulerExpl( func , I , h , y0 ):
+        ti=I[0]
+        tf=I[1]
+        t=arange(ti,tf+h,h)
+        n=len(t)
+        y= y0 * ones(n)
+        for i in xrange(n-1):
+                y[i+1]=y[i] + (t[i+1]-t[i])*func(t[i] , y[i])
+        return t,y
+
+def pointMilieu( func , I , h , y0 ):
+        ti=I[0]
+        tf=I[1]
+        t=arange(ti,tf+h,h)
+        n=len(t)
+        y=y0 * ones(n)
+        for i in xrange(n-1):
+                y[i+1]=y[i] + (t[i+1]-t[i])*func( t[i]+0.5*h , y[i]+0.5*h*func( t[i], y[i] ))
+        return t,y
+
+def RK4( func , I , h , y0 ):
+        ti=I[0]
+        tf=I[1]
+        t=arange(ti,tf+h,h)
+        n=len(t)
+        y=y0 * ones(n)
+        for i in xrange(n-1):
+                X1=y[i]
+                X2=y[i]+0.5*h*func(t[i],X1)
+                X3=y[i]+0.5*h*func(t[i]+0.5*h,X2)
+                X4=y[i]+h*func(t[i]+0.5*h,X3)
+                y[i+1]=y[i] + h*(1./6*func(t[i],X1) + 1./3*func(t[i]+0.5*h,X2) + 1./3*func(t[i]+0.5*h,X3) + 1./6*func(t[i]+h,X4)   )
+        return t,y
+\end{verbatim}
+\end{tiny}
+
+\newpage
+\subsection{Exercice 2: Une mise en jambe pour la programmation}
+\textbf{File: \texttt{ex2.py}}
+\begin{tiny}
+\begin{verbatim}
+from numpy import arange, ones
+from math import exp
+from schemedo import *
+import matplotlib.pyplot as plt
+
+def phi(t,y,h):
+        return 4*exp(0.8*t)-0.5*y
+
+def y(t):
+        return 4/1.3*exp(0.8*t)-1.4/1.3*exp(-0.5*t)
+
+
+I=[0,100]
+y0=2
+h=1
+t,eulexp=eulerExpl(phi,I,h,y0)
+plt.plot(t,eulexp,'r-',label='Euler explicite')
+truet=arange(I[0],I[1],0.05)
+trueY=map(y, truet)
+errors=map(error, eulexp , map(y, t))
+print 'errors:',errors
+
+
+plt.plot(truet,trueY,'g--',label='Solution reelle')
+plt.xlabel('t (temps)')
+plt.ylabel('solution y(t)')
+plt.legend()
+plt.title('Apparence des solutions')
+plt.show()
+
+\end{verbatim}
+\end{tiny}
+\newpage
+\subsection{Exercice 3: Comparaison entre différentes méthodes}
+\textbf{File: \texttt{ex3.py}}
+\begin{tiny}
+\begin{verbatim}
+from schemedo import *
+from numpy import linspace
+import matplotlib.pyplot as plt
+from math import exp
+
+#Partie 1: Etude de la convergence
+
+def f(t,x):
+        return -t*x
+
+def solution(t):
+        return x0*exp(-0.5*t*t)
+
+I=0
+T=6
+
+erreulerexpl=[]
+errpointmilieu=[]
+errrk=[]
+Nrange=range(10,1000,10)
+
+for N in Nrange:
+        h=(T-I)/float(N)
+        x0=2
+        tt=linspace( I , T , 100*(T-I))
+	
+	
+        t, eulerexpl = eulerExpl( f , [I,T] , h , x0 )
+        t, pointmilieu = pointMilieu( f , [I,T] , h , x0 )
+        t, rk= RK4( f , [I,T] , h , x0 )
+	
+        erreulerexpl.append(max(map(diff , eulerexpl , map(solution,t) )))
+        errpointmilieu.append(max(map(diff , pointmilieu , map(solution,t))))
+        errrk.append(max(map(diff , rk , map(solution,t))))
+	
+	
+plt.plot(Nrange,erreulerexpl,'r.',label='Euler Explicite')
+plt.plot(Nrange,errpointmilieu, 'g.',label='Point Milieu')
+plt.plot(Nrange,errrk, 'b.' , label='Runge-Kutta 4')
+
+plt.plot(Nrange,[ 1./i for i in Nrange],'k')
+plt.plot(Nrange,[ 1./(i**2) for i in Nrange],'k')
+plt.plot(Nrange,[ 1./(i**3) for i in Nrange],'k')
+plt.plot(Nrange,[ 1./(i**4) for i in Nrange],'k')
+plt.plot(Nrange,[ 1./(i**5) for i in Nrange],'k')
+
+plt.text(500,5*10**(-15),'1/N^5')
+plt.text(500,10**(-12),'1/N^4')
+plt.text(500,3*10**(-8),'1/N^3')
+plt.text(500,5*10**(-5),'1/N^2')
+plt.text(500,8*10**(-3),'1/N')
+
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel('N')
+plt.ylabel('Erreur absolue max')
+plt.legend(loc=2)
+plt.show()
+
+
+#Partie 2: Etude de la stabilite asymptotique
+
+
+def TLS(t,x):
+        return -L*x
+
+def solutionTLS(t):
+        return x0*exp(-L*t)
+L=8
+I=0
+T=10
+h=1
+x0=2
+
+t, eulerexpl = eulerExpl( TLS , [I,T] , h , x0 )
+t, pointmilieu = pointMilieu( TLS , [I,T] , h , x0 )
+t, rk= RK4( TLS , [I,T] , h , x0 )
+tt=linspace(I,T,200)
+sol=map(solutionTLS,tt)
+
+plt.plot(tt,sol,'y',label='Solution Exacte')
+plt.plot(t,eulerexpl,'r',label='Euler Explicite')
+plt.plot(t,pointmilieu, 'g',label='Point Milieu')
+plt.plot(t,rk, 'b' , label='Runge-Kutta 4')
+plt.title('Test Lineaire Standard, h=1, L=8')
+plt.xlabel('t')
+plt.legend(loc=1)
+plt.ylabel('x(t)')
+plt.show()
+
+\end{verbatim}
+\end{tiny}
+
+\subsection{Exercice 4: Problème d'équation Proie-Prédateur}
+\textbf{File: \texttt{ex4.py}}
+\begin{tiny}
+\begin{verbatim}
+import  matplotlib.pyplot as plt
+from numpy import *
+
+def holling2(N):
+        return 0.6*N/float(1+0.6*h*N)	
+
+n=range(1500)
+h=0.02
+fn=map(holling2,n)
+plt.plot(n,fn,'g')
+
+plt.xlabel('N')
+plt.ylabel('f(N)=0.6N/(1+0.6hN)')
+plt.title('Proies mangees/predateur/temps = f( proies )')
+plt.show()
+\end{verbatim}
+\end{tiny}
+\newpage
+\textbf{File: \texttt{ex4\_predprey.m}}
+\begin{tiny}
+\begin{verbatim}
+function yp=predprey(t,y)
+%Lotka-Volterra:
+%yp=[1.2*y(1)-0.6*y(1)*y(2) ;-0.8*y(2)+0.3*y(1)*y(2)];
+%Lotka-Volterra + Holling type II:
+%yp=[1.2*y(1)-0.6*y(1)*y(2)/(1+0.02*0.6*y(1)) ;-0.8*y(2)+0.6*y(1)*y(2)/(1+0.02*0.6*y(1))];
+%Holling II pur:
+yp=[1.2*y(1)*(1-y(1)/3)-0.6*y(1)*y(2)/(1+0.02*0.6*y(1)) ;-8*y(2)+6*y(1)*y(2)/(1+0.02*0.6*y(1))];
+\end{verbatim}
+\end{tiny}
+
+\textbf{File: \texttt{ex4\_predpreycompute.m}}
+\begin{tiny}
+\begin{verbatim}
+tspan=[0,50];
+y0=[2,1];
+[t,y]=ode45(@ex4_predprey, tspan, y0);
+
+%Solutions:
+plot(t,y);
+
+%Portrait de phases:
+%plot(y(:,1),y(:,2));
+
+%3D:
+%plot3(t,y(:,1),y(:,2));
+%xlabel('t');
+%ylabel('proies');
+%zlabel('prédateurs');
+
+\end{verbatim}
+\end{tiny}
+\subsection{Exercice 5: Contrôler les options d'indexation}
+\textbf{File: \texttt{ex5.m}}
+\begin{tiny}
+\begin{verbatim}
+plot(t,y);
+[t,y]=ode23(@ex5_dydt, [0 4], 0.5) ;
+options=odeset('RelTol', 1e-4) ;
+ode23(@ex_5dydt, [0,4], 0.5, options) ; 
+\end{verbatim}
+\end{tiny}
+
+\textbf{File: \texttt{ex5\_dydt.m}}
+\begin{tiny}
+\begin{verbatim}
+function dydt = dydt (t,y)
+dydt = 10*exp(-((t-2).^2)/(2*(0.075).^2))-0.6*y
+\end{verbatim}
+\end{tiny}
+\newpage
+\subsection{Exercice 6: MatLab et les problèmes raides}
+\textbf{File: \texttt{exo6.m}}
+\begin{tiny}
+\begin{verbatim}
+%[T,Y]=ode45('exo6_dydt',[0 20], [1 1]) ;
+%plot(T,Y(:,1))
+
+%[T,Y]=ode23s('exo6_dydt',[0 6000], [1 1]) ;
+%plot(T,Y(:,1));
+
+[T,Y]=ode45('exo6_dydt',[0 6000], [1 1]) ;
+plot(T,Y(:,1));
+\end{verbatim}
+\end{tiny}
+
+\textbf{File: \texttt{exo6\_3.m}}
+\begin{tiny}
+\begin{verbatim}
+%for i =1:20:1000
+%        [T,Y]=ode45(@(t,y)[y(2),(i*(1-y(1)*y(1))*y(2)-y(1))]', [0 6000],[1 1]);
+%        MU=i*ones(length(T),1);
+%        plot3(T,MU,Y(:,1));
+%        if (i==1)
+%                hold on 
+%        end;
+%end;
+%hold off
+%xlabel('t')
+%ylabel('mu')
+%zlabel('y')
+
+for i =1:200:1000
+        [T,Y]=ode23s(@(t,y)[y(2),(i*(1-y(1)*y(1))*y(2)-y(1))]', [0 6000],[1 1]);
+        MU=i*ones(length(T),1);
+        %plot3(T,MU,Y(:,1));
+        plot(Y(:,1),Y(:,2));
+        if (i==1)
+                hold on 
+        end;
+end;
+hold off
+%xlabel('t')
+%ylabel('mu')
+%zlabel('y')
+title('Portrait de phase des solutions y')
+\end{verbatim}
+\end{tiny}
+
+\textbf{File: \texttt{exo6\_dydt.m}}
+\begin{tiny}
+\begin{verbatim}
+function dy = rigid(t,y)
+dy = zeros(2,1) ;
+dy(1) = y(2) ;
+dy(2) = 1*(1-y(1)^2)*y(2)-y(1) ;
+\end{verbatim}
+\end{tiny}
 \end{document}
