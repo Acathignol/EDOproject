@@ -7,19 +7,17 @@
 \usepackage{graphicx}
 \usepackage{subfig}
 \usepackage{array}
-%\usepackage{wrapfigure}
+\usepackage{wrapfig}
 
 \begin{document}
 \title{Projet EDMO}
 \author{Annie Cathignol\\Louis Becquey\\3-BIM}
 \date{\today}
 \maketitle
-
-\begin{center}
-\begin{figure}[b!]
-\includegraphics[height=3.2cm]{InsaBioLogo3.png}
+\begin{figure}[h!]
+\centering
+\includegraphics[height=6cm]{matlabresult.png}
 \end{figure}
-\end{center}
 
 \newpage
 
@@ -35,7 +33,37 @@ $\frac{\partial^{p-1}\Phi}{\partial h^{p-1}} (t,x,0) = \frac{1}{p}D^{p-1}f(t,x)$
 
 
 \subsection{Résultat 2}
-{\it \bf Pour qu’un schéma de Runge-Kutta explicite à un pas soit au-moins d’ordre 2, il faut et il suffit que les points $b_{i}$, les poids intermédiaires $a_{i,j}$ et les paramètres $c_{i}$ (i, j variant de 1 à s) vérifient:} $$\sum_{i=1}^{s}b_{i}c_{i} = \frac{1}{2} \; \textrm{   d'une part, et d'autre part   } \; \sum_{i=1}^{s}b_{i}(\sum_{j=1}^{i-1}a_{i,j})= \frac{1}{2}$$
+{\it \bf Pour qu’un schéma de Runge-Kutta explicite à un pas soit au-moins d’ordre 2, il faut et il suffit que les points $b_{i}$, les poids intermédiaires $a_{i,j}$ et les paramètres $c_{i}$ (i, j variant de 1 à s) vérifient:} $$\sum_{i=1}^{s}b_{i}c_{i} = \frac{1}{2} \; \textrm{   d'une part, et d'autre part   } \; \sum_{i=1}^{s}b_{i}\left(\sum_{j=1}^{i-1}a_{ij}\right)= \frac{1}{2}$$
+
+
+\paragraph{Démonstration:} On sait que : 
+\begin{equation}\phi(t_n,x_n,h_n)=\sum_{i=1}^{s} b_i f(t_n+c_i h_n,X_i) \textrm{ avec } X_i=x_n+h_n\sum^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,X_j)
+\end{equation}
+Et si le schéma est d'ordre au moins 2, 
+\begin{equation}\frac{\delta}{\delta h}\phi(t,x,0)=\frac{1}{2}Df(t,x)
+\end{equation}
+Calculons:
+\begin{equation}\frac{\delta X_i}{\delta h}=\frac{\delta}{\delta h}(x_n+h_n\sum^{i-1}_{j=1} a_{ij} f(t_n+c_jh_n,X_j))=\sum^{i-1}_{j=1} a_{ij} f(t_n+c_jh_n,X_j)
+\end{equation}
+et:
+\begin{equation}
+\frac{\delta}{\delta h}\left[ b_if(t_n+c_ih_n,X_i)\right] = b_i . \frac{\delta}{\delta h}f(t_n+c_ih_n,X_i)= b_i \left( \frac{\delta f}{\delta (t_n+c_ih_n)}\frac{\delta (t_n+c_ih_n)}{\delta h}+\frac{\delta f}{\delta X_i}\frac{\delta X_i}{\delta h}\right)= b_i \left( \frac{\delta f}{\delta (t_n+c_ih_n)}c_i+\frac{\delta f}{\delta X_i}\frac{\delta X_i}{\delta h}\right)
+\end{equation}
+Donc, d'après $(1), (3)$ et $(4)$,
+$$ \frac{\delta \phi}{\delta h} = \frac{\delta}{\delta h}\left[ \sum^{s}_{i=1} b_i f(t_n+c_i h_n,X_i)\right] = \sum^{s}_{i=1} b_i\left[ \frac{\delta f}{\delta (t_n+c_ih_n)}c_i+\frac{\delta f}{\delta X_i}\sum^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,X_j) \right]\\ $$
+$$= \sum^{s}_{i=1} b_ic_i\left( \frac{\delta f}{\delta (t_n+c_ih_n)}\right) +\sum^{s}_{i=1} b_i \left( \frac{\delta f}{\delta x_n}.\sum^{i-1}_{j=1} a_{ij} f(t_n+c_jh_n,X_j) \right)\\ $$
+\\
+Donc, si $h_n=0$ \textit{(et donc $X_j=x_n$)} :
+\begin{equation}
+\frac{\delta \phi}{\delta h}|_{(t,x,0)} = \frac{\delta f}{\delta t}|_{(t,x)}.\sum^{s}_{i=1} b_ic_i +  f(t,x).\frac{\delta f}{\delta x}|_{(t,x)}.\sum^{s}_{i=1} b_i\left(\sum^{i-1}_{j=1} a_{ij}\right)
+\end{equation}
+De plus on a $Df(t,x)=\frac{\delta f}{\delta t}|_{(t,x)}+f(t,x)\frac{\delta f}{\delta x}|_{(t,x)}$ donc selon $(2)$:
+$$\frac{\delta \phi}{\delta h}|_{(t,x,0)}=\frac{1}{2}Df(t,x)= \frac{1}{2}\frac{\delta f}{\delta t}|_{(t,x)}+\frac{1}{2}f(t,x) \frac{\delta f}{\delta x}|_{(t,x)}$$
+On en déduit donc d'après $(5)$ que par identification, pour que le schéma soit d'ordre au moins 2, il faut et
+il suffit que les points $b_i$ , les poids intermédiaires $a_{ij}$ et les paramètres $c_i$
+vérifient les conditions: 
+$$\sum^{s}_{i=1} b_ic_i = \frac{1}{2}$$
+$$\sum^{s}_{i=1} b_i \left(\sum^{i-1}_{j=1} a_{ij}\right) = \frac{1}{2}$$
 
 
 \section{Exercice 1 - Problème raide}
@@ -194,10 +222,10 @@ Donc par le théorème de LAX, le schéma est convergent d'ordre au moins 1 vers
 \paragraph{A l'ordre 2}
 Ici, $\Phi(t,y,h)$ est de classe $C^2$. Donc $\Phi$ est lipschitzienne par rapport à sa deuxième variable, donc le schéma est stable à l'ordre 2 également.\\
 Cette fois par contre, $\frac{\partial \Phi}{\partial h} (t,y,0)=0 \neq \frac{1}{2}Df(t,y)$, donc le schéma n'est pas consistant à l'ordre 2.\\
-%\begin{wrapfigure}[1]{r}{10cm}
-%	\includegraphics[scale=0.45]{ex2.png}
-%	\caption{Comparaison entre méthode numérique et solution réelle sur l'intervalle [0,4]}
-%\end{wrapfigure}
+\begin{wrapfigure}[1]{r}{10cm}
+	\includegraphics[scale=0.45]{ex2.png}
+	\caption{Comparaison entre méthode numérique et solution réelle sur l'intervalle [0,4]}
+\end{wrapfigure}
 Donc le schéma n'est convergent que d'ordre 1.
 
 \subsection{}
@@ -560,6 +588,45 @@ $$
 On obtient alors un foyer asymptotiquement stable, ce qui est beaucoup plus plausible écologiquement parlant.
 \newpage
 \section{Exercice 5 - Contrôler les options d'intégration}
+
+\begin{wrapfigure}[1]{r}{7cm}
+	\includegraphics[scale=0.55]{ex5_1.png}
+\end{wrapfigure}
+
+On considère le problème de Cauchy:
+$$
+(C2)
+\left \{
+\begin{array}{l}
+y' = 10 e^{-(t-2)^2 / [2(0.075)^2 ]} - 0.6y\\
+y_{(0)} = 0.5\\
+\end{array}
+\right.
+$$
+
+Ce qui, en MatLab, donne la fonction suivante:
+\begin{verbatim}
+function dydt = dydt (t,y)
+dydt = 10*exp(-((t-2).^2)/(2*(0.075).^2))-0.6*y
+\end{verbatim}
+
+On utilise le solveur \texttt{ode23()} pour approcher la solution, ce qui donne:\\
+\vspace{2cm}
+\begin{wrapfigure}[1]{r}{7cm}
+	\includegraphics[scale=0.55]{ex5_2.png}
+\end{wrapfigure}
+\vspace{2cm}
+
+
+En ajoutant l'argument \texttt{odeset(’RelTol’, 1e-4)} à la commande \texttt{ode23()},\\ on affiche les points réellement calculés sur le graphique:
+\vspace{3cm}
+
+Cette visualisation des intervalles de temps $h$ automatiquement calculés par le solveur, dit \textit{à pas de temps adaptatif}, montre clairement que plus la solution du problème est raide, plus h va diminuer si l'on veut rester en dessous d'un seuil d'erreur choisi ($10^{-4}$ précisé ici dans cet exemple).\\
+
+Ainsi, les problèmes raides mettent plus de temps à être estimés numériquement par des schémas explicites.\\
+Comme on l'a vu dans l'exercice 3, les schémas explicites ne sont pas inconditionnellement stables asymptotiquement, donc h s'adapte à la pente.\\
+Si on utilisait un schéma implicite, inconditionnellement stable, on pourrait conserver la même valeur de h quelque soit la pente, sans dépasser le seuil d'erreur.
+
 \newpage
 \section{Exercice 6 - Matlab et les problèmes raides}
 
