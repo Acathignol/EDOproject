@@ -66,71 +66,6 @@ $$\sum^{s}_{i=1} b_ic_i = \frac{1}{2}$$
 $$\sum^{s}_{i=1} b_i \left(\sum^{i-1}_{j=1} a_{ij}\right) = \frac{1}{2}$$
 
 
-On sait que : \begin{equation}
-\phi(t_n,x_n,h_n)=\Sigma^{s}_{i=1} b_i f(t_n+c_i h_n,x_i)
-\end{equation}
-Et \begin{equation}
-\frac{\delta}{\delta h}\phi(t,x,0)=\frac{1}{2}Df(t,x)
-\end{equation}
-Et, $x_i=x_n+h_n\Sigma^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,x_j)$ .\\
-Alors:\begin{equation}
-\frac{\delta x_i}{\delta h}=\frac{\delta}{\delta h}(x_n+h_n\Sigma^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,x_j))
-\end{equation}
-\begin{equation}
-\Leftrightarrow \frac{\delta x_i}{\delta h}=\Sigma^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,x_j))
-\end{equation}
-
-De plus:
-\begin{equation}
-\frac{\delta}{\delta h}[b_if(t_n+c_ih_n,x_i)] = b_i \frac{\delta}{\delta h}f(t_n+c_ih_n,x_i)
-\end{equation}
-\begin{equation}
-\Leftrightarrow \frac{\delta}{\delta h}[b_if(t_n+c_ih_n,x_i)]= b_i (\frac{\delta f}{\delta (t_n+c_ih_n)}(PUT)\frac{\delta (t_n+c_ih_n)}{\delta h}+\frac{\delta f}{\delta x_i}(PUT) \frac{\delta x_i}{\delta h})
-\end{equation}
-\begin{equation}
-\Leftrightarrow \frac{\delta}{\delta h}[b_if(t_n+c_ih_n,x_i)]= b_i (\frac{\delta f}{\delta (t_n+c_ih_n)}(PUT)c_i+\frac{\delta f}{\delta x}(PUT) \frac{\delta x_i}{\delta h})
-\end{equation}
-
-
-Donc, comme $\phi(t_n,x_n,h_n)=\Sigma^{s}_{i=1} b_i f(t_n+c_i h_n,x_i)$,
-on obtient \\
-\\
-$ \frac{\delta}{\delta h}\phi(t_n,x_n,h_n) = \frac{\delta}{\delta h}[\Sigma^{s}_{i=1} b_i f(t_n+c_i h_n,x_i)]\\
-\\
-\Leftrightarrow \frac{\delta}{\delta h}\phi(t_n,x_n,h_n) = (\Sigma^{s}_{i=1} b_ic_i) \frac{\delta f}{\delta (t_n+c_ih_n)}(PUT) + [\Sigma^{s}_{i=1} b_i(\Sigma^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,x_j))]  \frac{\delta f}{\delta x}\\ $
-\\
-Donc, si $h_n=0$ :
-\begin{equation}
-\frac{\delta}{\delta h}\phi(t_n,x_n,0) = (\Sigma^{s}_{i=1} b_ic_i) \frac{\delta f}{\delta t}(t,x) + [\Sigma^{s}_{i=1} b_i(\Sigma^{i-1}_{j=1} a_{i,j})] f(t,x) \frac{\delta f}{\delta x}(t,x)
-\end{equation}
-Soit $Df(t,x)=\frac{\delta f}{\delta t}(t,x)+f(t,x) \frac{\delta f}{\delta x}(t,x)$.\\
-Et, on sait que $\frac{\delta}{\delta h}\phi(t,x,0)=\frac{1}{2}Df(t,x)$.\\
-\begin{equation}
-\Leftrightarrow \frac{\delta}{\delta h}\phi(t,x,0) = \frac{1}{2}\frac{\delta f}{\delta t}(t,x)+\frac{1}{2}f(t,x) \frac{\delta f}{\delta x}(t,x)
-\end{equation}
-$\Leftrightarrow$\[
-\left\{
-\begin{array}{ll}
-\Sigma^{s}_{i=1} b_ic_i = \frac{1}{2} \\
-\Sigma^{s}_{i=1} b_i(\Sigma^{i-1}_{j=1} a_{i,j}) = \frac{1}{2}\\
-\end{array}
-\right.
-\]
-
-Donc, pour un modèle de Runge-Kutta explicite à un pas soit au-moins d’ordre 2, il faut et
-il suffit que les points $b_i$ , les poids intermédiaires $a_{i,j}$ et les paramètres $c_i$ $(i, j = 1, ..., s)$
-vérifient toutes les conditions suivantes: 
-\[
-\left\{
-\begin{array}{ll}
-\Sigma^{s}_{i=1} b_ic_i = \frac{1}{2} \\
-\Sigma^{s}_{i=1} b_i(\Sigma^{i-1}_{j=1} a_{i,j}) = \frac{1}{2}\\
-\end{array}
-\right.
-\]
-
-
-
 \section{Exercice 1 - Problème raide}
 On considère le problème de Cauchy suivant :
 trouver $u \in C^{1}([0,1], \mathbb{R} )$ telle que
@@ -1011,6 +946,35 @@ plt.show()
 \end{verbatim}
 \end{tiny}
 
+\textbf{File: \texttt{ex3.m}}
+\begin{tiny}
+\begin{verbatim}
+tspan=[0 50]
+h=1
+y0=4
+
+[t, y] = EulExp('ex3_dydt', tspan, y0, h) ;
+disp([t, y])
+hold on
+plot(t,y,'g')
+
+[t, y] = PointMilieu('ex3_dydt', tspan, y0, h) ;
+disp([t, y])
+plot(t,y,'r')
+
+[t, y] = RK4('ex3_dydt', tspan, y0, h) ;
+disp([t, y])
+plot(t,y,'b')
+hold off
+
+xlabel('t')
+ylabel('y')
+ylim([0 4])
+legend('Euler Explicite','Point Milieu','Runge-Kutta 4')
+title('Stabilité des solutions y selon la méthode choisie')
+\end{verbatim}
+\end{tiny}
+\newpage
 \textbf{File: \texttt{EulExp.m}}
 \begin{tiny}
 \begin{verbatim}
@@ -1071,6 +1035,7 @@ for i = 1 : n-1
 end
 \end{verbatim}
 \end{tiny}
+\newpage
 \subsection{Exercice 4: Problème d'équation Proie-Prédateur}
 \textbf{File: \texttt{ex4.py}}
 \begin{tiny}
@@ -1092,7 +1057,7 @@ plt.title('Proies mangees/predateur/temps = f( proies )')
 plt.show()
 \end{verbatim}
 \end{tiny}
-\newpage
+
 \textbf{File: \texttt{ex4\_predprey.m}}
 \begin{tiny}
 \begin{verbatim}
@@ -1145,7 +1110,7 @@ function dydt = dydt (t,y)
 dydt = 10*exp(-((t-2).^2)/(2*(0.075).^2))-0.6*y
 \end{verbatim}
 \end{tiny}
-\newpage
+
 \subsection{Exercice 6: MatLab et les problèmes raides}
 \textbf{File: \texttt{exo6.m}}
 \begin{tiny}
