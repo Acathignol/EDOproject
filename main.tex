@@ -423,6 +423,65 @@ La suite est plus complexe, mais le même principe peut être appliqué:\\ $x_{n
 Donc les trois schémas ne sont pas inconditionnellement stables, on devra soit faire attention aux pas de temps h choisis, soit préférer utiliser un schéma implicite.
 
 \subsection{}
+Ce qui fonctionne sur le test linéaire standard fonctionne de même sur le problème de Cauchy qui nous concerne:
+
+Essayons avec MatLab de tracer l'apparence des solutions pour différentes conditions sur les paramètres $x_0$, T et h:\\
+\begin{table}
+\begin{tabular}{l}
+Pour $h=0.1$:
+\end{tabular}\\
+\begin{tabular}{cccc}
+\subfloat[T=15, $y_0$=1]{\includegraphics[scale=0.4]{ex3_3_h1T15x01.png}}
+&
+\subfloat[T=20, $y_0$=1]{\includegraphics[scale=0.4]{ex3_3_h1T20x01.png}}
+&
+\subfloat[T=20, $y_0$=1000]{\includegraphics[scale=0.4]{ex3_3_h1T20x01000.png}}
+&
+\subfloat[T=50, $y_0$=1]{\includegraphics[scale=0.4]{ex3_3_h1T50x01.png}}
+\\
+\end{tabular}
+\begin{tabular}{l}
+Pour $h=0.3$:
+\end{tabular}\\
+\begin{tabular}{cccc}
+\subfloat[T=15, $y_0$=1]{\includegraphics[scale=0.4]{ex3_3_h3T15x01.png}}
+&
+\subfloat[T=20, $y_0$=1]{\includegraphics[scale=0.4]{ex3_3_h3T20x01.png}}
+&
+\subfloat[T=20, $y_0$=1000]{\includegraphics[scale=0.4]{ex3_3_h3T20x01000.png}}
+&
+\subfloat[T=30, $y_0$=2]{\includegraphics[scale=0.4]{ex3_3_h3T30x02.png}}
+\\
+\end{tabular}
+\begin{tabular}{l}
+Pour $h=0.5$:
+\end{tabular}\\
+\begin{tabular}{ccc}
+\subfloat[T=15, $y_0$=1]{\includegraphics[scale=0.4]{ex3_3_h5T15x01.png}}
+&
+\subfloat[T=15, $y_0$=2]{\includegraphics[scale=0.4]{ex3_3_h5T15x02.png}}
+&
+\subfloat[T=20, $y_0$=2]{\includegraphics[scale=0.4]{ex3_3_h5T20x02.png}}
+\\
+\end{tabular}
+\end{table}
+\begin{table}
+\begin{tabular}{l}
+Pour $h=1$:
+\end{tabular}\\
+\begin{tabular}{cccc}
+\subfloat[T=15, $y_0$=1]{\includegraphics[scale=0.4]{ex3_3_h1T15x01.png}}
+&
+\subfloat[T=20, $y_0$=1]{\includegraphics[scale=0.4]{ex3_3_h1T20x01.png}}
+&
+\subfloat[T=20, $y_0$=1000]{\includegraphics[scale=0.4]{ex3_3_h1T20x01000.png}}
+&
+\subfloat[T=50, $y_0$=1]{\includegraphics[scale=0.4]{ex3_3_h1T50x01.png}}
+\\
+\end{tabular}
+\end{table}
+
+On voit que $x_0$ n'a pas d'influence sur la stabilité. Par contre, h en a. T permet seulement de cacher ce défaut des schémas s'il est trop petit.\\
 
 \newpage
 \section{Exercice 4 - Problème d'équation Proie-Prédateur}
@@ -788,6 +847,7 @@ plt.show()
 
 \end{verbatim}
 \end{tiny}
+
 \newpage
 \subsection{Exercice 3: Comparaison entre différentes méthodes}
 \textbf{File: \texttt{ex3.py}}
@@ -885,7 +945,68 @@ plt.show()
 
 \end{verbatim}
 \end{tiny}
+\\
 
+\textbf{File: \texttt{EulExp.m}}
+\begin{tiny}
+\begin{verbatim}
+function [t,y]=EulExp (dydt, tspan,y0,h)
+ti = tspan(1);
+tf = tspan(2);
+t = (ti:h:tf)';
+n = length(t);  
+if t(n) < tf
+t(n+1) = tf;
+n = n+1;
+end
+y = y0 * ones(n,1);
+for i = 1 : n-1
+y(i+1) = y(i) + h*feval(dydt,t(i), y(i)); 
+end
+\end{verbatim}
+\end{tiny}
+
+\textbf{File: \texttt{PointMilieu.m}}
+\begin{tiny}
+\begin{verbatim}
+function [t,y]=PointMilieu (dydt, tspan,y0,h)
+ti = tspan(1);
+tf = tspan(2);
+t = (ti:h:tf)';
+n = length(t);  
+if t(n) < tf
+t(n+1) = tf;
+n = n+1;
+end
+y = y0 * ones(n,1);
+for i = 1 : n-1
+y(i+1) = y(i) + h*feval(dydt,t(i)+h/2,y(i)+(h/2)*feval(dydt,t(i),y(i))); 
+end
+\end{verbatim}
+\end{tiny}
+
+\textbf{File: \texttt{RK4.m}}
+\begin{tiny}
+\begin{verbatim}
+function [t,y]=RK4 (dydt, tspan,y0,h)
+ti = tspan(1);
+tf = tspan(2);
+t = (ti:h:tf)';
+n = length(t);  
+if t(n) < tf
+t(n+1) = tf;
+n = n+1;
+end
+y = y0 * ones(n,1);
+for i = 1 : n-1
+    X1=y(i)
+    X2=y(i) + (h/2)*feval(dydt,t(i),X1)
+    X3=y(i) + (h/2)*feval(dydt,t(i)+(h/2),X2)
+    X4=y(i) + h*feval(dydt,t(i)+(h/2),X3) 
+    y(i+1) = y(i) + h*((1/6)*feval(dydt,t(i),X1)+(1/3)*feval(dydt,t(i)+(h/2),X2)+(1/3)*feval(dydt,t(i)+(h/2),X3)+(1/6)*feval(dydt,t(i)+h,X4));
+end
+\end{verbatim}
+\end{tiny}
 \subsection{Exercice 4: Problème d'équation Proie-Prédateur}
 \textbf{File: \texttt{ex4.py}}
 \begin{tiny}
