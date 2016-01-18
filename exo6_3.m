@@ -16,7 +16,7 @@ zlabel('y')
  %   [T,Y]=ode23s(@(t,y)[y(2),(i*(1-y(1)*y(1))*y(2)-y(1))]', [0 6000],[1 1]);
   %  MU=i*ones(length(T),1);
    % plot3(T,MU,Y(:,1));
-    %%plot(Y(:,1),Y(:,2));
+    %%plot(Y(:,1),Y(:,2));ww
     %if (i==1)
      %   hold on 
     %end;

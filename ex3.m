@@ -1,6 +1,6 @@
-tspan=[0 1000]
-h=0.1
-y0=20
+tspan=[0 50]
+h=2
+y0=1000
 
 [t, y] = EulExp('ex3_dydt', tspan, y0, h) ;
 disp([t, y])
@@ -18,6 +18,6 @@ hold off
 
 xlabel('t')
 ylabel('y')
-ylim([0 4])
+ylim([-100 2000])
 legend('Euler Explicite','Point Milieu','Runge-Kutta 4')
 title('Stabilité des solutions y selon la méthode choisie')
