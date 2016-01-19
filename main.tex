@@ -31,6 +31,39 @@ $\vdots$ \\
 $\frac{\partial^{p-1}\Phi}{\partial h^{p-1}} (t,x,0) = \frac{1}{p}D^{p-1}f(t,x)$ , \\
 \end{center}
 
+\paragraph{Démonstration:} On connait l'erreur de consistance :
+\begin{equation}
+\tau_n = x(t_{n+1})-x(t_{n})-h_n( \Phi (t_n, x(t_n),h_n)
+\end{equation} 
+Si on applique la formule de Taylor à $x(t_{n+1})-x(t_n)$, on obtient:\\
+$x(t_{n+1})-x(t_n)=\sum^{p}_{i=1} \frac{h_{n}^{i}}{i!} f^{(i-1)} (t_n,x(t_{n}))+ o(h^p_n)$ ,\\
+$\Leftrightarrow x(t_{n+1})-x(t_n) = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k+1!} f^{(k)} (t_n,x(t_{n}))] + o(h^p_n)$,\\
+$\Leftrightarrow x(t_{n+1})-x(t_n) = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{f^{(k)} (t_n,x(t_{n}))}{k+1}] + o(h^p_n)$,\\
+Et pour $\Phi (t_n,x(t_n),h_n)$:\\
+$\Phi (t_n,x(t_n),h_n)=h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{\partial^{k} \Phi}{\partial h^{k}} (t_n,x(t_{n}),0)]+ o(h^{p+1}_n)$ ,\\
+$\Leftrightarrow \Phi (t_n,x(t_n),h_n)=h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}} ]+ o(h^{p+1}_n)$
+
+Ce qui nous transforme l'erreur de consistance à:\\
+$\tau_n = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{f^{(k)} (t_n,x(t_{n}))}{k+1}] + o(h^p_n) - (h_n [\frac{h_{n}^{k}}{k!} \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}} ] + o(h^{p+1}_n))$\\
+$\Leftrightarrow \tau_n = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{f^{(k)} (t_n,x(t_{n}))}{k+1} - \frac{h_{n}^{k}}{k!} \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}}] + o(h^p_n)+ o(h^{p+1}_n)$\\
+
+Ce qui résulte à:
+\begin{equation}
+\Leftrightarrow \tau_n = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} [\frac{f^{(k)} (t_n,x(t_{n}))}{k+1} - \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}}]] + o(h^{p+1}_n)
+\end{equation}
+
+Or, on cherche un $\tau_n$ tel que $\tau_n = o(h^{p+1}_n)$, l'erreur de consistance attendue si le schéma explicite à un pas est consistant d’ordre p. 
+Donc, pour cela, $\frac{f^{(k)} (t_n,x(t_{n}))}{k+1} - \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}}$ doivent tous être égal à $0$, pour tout $k \in [0,p-1]$.
+Autrement dit, pour tout $k \in [0,p-1]$, $\frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}} = \frac{f^{(k)} (t_n,x(t_{n}))}{k+1} $.\\
+
+Donc, pour toute fonction f assez régulière (de classe $C^{p}$ ), le schéma explicite à un pas est consistant d’ordre p avec le problème de Cauchy correspondant si:\\
+\begin{center}
+$\Phi (t,x,0) = f(t,x)$ ,  \\
+$\frac{\partial \Phi}{\partial h} (t,x,0) = \frac{1}{2}Df(t,x)$ , \\
+$\vdots$ \\
+$\frac{\partial^{p-1}\Phi}{\partial h^{p-1}} (t,x,0) = \frac{1}{p}D^{p-1}f(t,x)$ , \\
+\end{center}
+
 
 \subsection{Résultat 2}
 {\it \bf Pour qu’un schéma de Runge-Kutta explicite à un pas soit au-moins d’ordre 2, il faut et il suffit que les points $b_{i}$, les poids intermédiaires $a_{i,j}$ et les paramètres $c_{i}$ (i, j variant de 1 à s) vérifient:} $$\sum_{i=1}^{s}b_{i}c_{i} = \frac{1}{2} \; \textrm{   d'une part, et d'autre part   } \; \sum_{i=1}^{s}b_{i}\left(\sum_{j=1}^{i-1}a_{ij}\right)= \frac{1}{2}$$
@@ -40,25 +73,25 @@ $\frac{\partial^{p-1}\Phi}{\partial h^{p-1}} (t,x,0) = \frac{1}{p}D^{p-1}f(t,x)$
 \begin{equation}\phi(t_n,x_n,h_n)=\sum_{i=1}^{s} b_i f(t_n+c_i h_n,X_i) \textrm{ avec } X_i=x_n+h_n\sum^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,X_j)
 \end{equation}
 Et si le schéma est d'ordre au moins 2, 
-\begin{equation}\frac{\delta}{\delta h}\phi(t,x,0)=\frac{1}{2}Df(t,x)
+\begin{equation}\frac{\partial}{\partial h}\phi(t,x,0)=\frac{1}{2}Df(t,x)
 \end{equation}
 Calculons:
-\begin{equation}\frac{\delta X_i}{\delta h}=\frac{\delta}{\delta h}(x_n+h_n\sum^{i-1}_{j=1} a_{ij} f(t_n+c_jh_n,X_j))=\sum^{i-1}_{j=1} a_{ij} f(t_n+c_jh_n,X_j)
+\begin{equation}\frac{\partial X_i}{\partial h}=\frac{\partial}{\partial h}(x_n+h_n\sum^{i-1}_{j=1} a_{ij} f(t_n+c_jh_n,X_j))=\sum^{i-1}_{j=1} a_{ij} f(t_n+c_jh_n,X_j)
 \end{equation}
 et:
 \begin{equation}
-\frac{\delta}{\delta h}\left[ b_if(t_n+c_ih_n,X_i)\right] = b_i . \frac{\delta}{\delta h}f(t_n+c_ih_n,X_i)= b_i \left( \frac{\delta f}{\delta (t_n+c_ih_n)}\frac{\delta (t_n+c_ih_n)}{\delta h}+\frac{\delta f}{\delta X_i}\frac{\delta X_i}{\delta h}\right)= b_i \left( \frac{\delta f}{\delta (t_n+c_ih_n)}c_i+\frac{\delta f}{\delta X_i}\frac{\delta X_i}{\delta h}\right)
+\frac{\partial}{\partial h}\left[ b_if(t_n+c_ih_n,X_i)\right] = b_i . \frac{\partial}{\partial h}f(t_n+c_ih_n,X_i)= b_i \left( \frac{\partial f}{\partial (t_n+c_ih_n)}\frac{\partial (t_n+c_ih_n)}{\partial h}+\frac{\partial f}{\partial X_i}\frac{\partial X_i}{\partial h}\right)= b_i \left( \frac{\partial f}{\partial (t_n+c_ih_n)}c_i+\frac{\partial f}{\partial X_i}\frac{\partial X_i}{\partial h}\right)
 \end{equation}
 Donc, d'après $(1), (3)$ et $(4)$,
-$$ \frac{\delta \phi}{\delta h} = \frac{\delta}{\delta h}\left[ \sum^{s}_{i=1} b_i f(t_n+c_i h_n,X_i)\right] = \sum^{s}_{i=1} b_i\left[ \frac{\delta f}{\delta (t_n+c_ih_n)}c_i+\frac{\delta f}{\delta X_i}\sum^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,X_j) \right]\\ $$
-$$= \sum^{s}_{i=1} b_ic_i\left( \frac{\delta f}{\delta (t_n+c_ih_n)}\right) +\sum^{s}_{i=1} b_i \left( \frac{\delta f}{\delta x_n}.\sum^{i-1}_{j=1} a_{ij} f(t_n+c_jh_n,X_j) \right)\\ $$
+$$ \frac{\partial \phi}{\partial h} = \frac{\partial}{\partial h}\left[ \sum^{s}_{i=1} b_i f(t_n+c_i h_n,X_i)\right] = \sum^{s}_{i=1} b_i\left[ \frac{\partial f}{\partial (t_n+c_ih_n)}c_i+\frac{\partial f}{\partial X_i}\sum^{i-1}_{j=1} a_{i,j} f(t_n+c_jh_n,X_j) \right]\\ $$
+$$= \sum^{s}_{i=1} b_ic_i\left( \frac{\partial f}{\partial (t_n+c_ih_n)}\right) +\sum^{s}_{i=1} b_i \left( \frac{\partial f}{\partial x_n}.\sum^{i-1}_{j=1} a_{ij} f(t_n+c_jh_n,X_j) \right)\\ $$
 \\
 Donc, si $h_n=0$ \textit{(et donc $X_j=x_n$)} :
 \begin{equation}
-\frac{\delta \phi}{\delta h}|_{(t,x,0)} = \frac{\delta f}{\delta t}|_{(t,x)}.\sum^{s}_{i=1} b_ic_i +  f(t,x).\frac{\delta f}{\delta x}|_{(t,x)}.\sum^{s}_{i=1} b_i\left(\sum^{i-1}_{j=1} a_{ij}\right)
+\frac{\partial \phi}{\partial h}|_{(t,x,0)} = \frac{\partial f}{\partial t}|_{(t,x)}.\sum^{s}_{i=1} b_ic_i +  f(t,x).\frac{\partial f}{\partial x}|_{(t,x)}.\sum^{s}_{i=1} b_i\left(\sum^{i-1}_{j=1} a_{ij}\right)
 \end{equation}
-De plus on a $Df(t,x)=\frac{\delta f}{\delta t}|_{(t,x)}+f(t,x)\frac{\delta f}{\delta x}|_{(t,x)}$ donc selon $(2)$:
-$$\frac{\delta \phi}{\delta h}|_{(t,x,0)}=\frac{1}{2}Df(t,x)= \frac{1}{2}\frac{\delta f}{\delta t}|_{(t,x)}+\frac{1}{2}f(t,x) \frac{\delta f}{\delta x}|_{(t,x)}$$
+De plus on a $Df(t,x)=\frac{\partial f}{\partial t}|_{(t,x)}+f(t,x)\frac{\partial f}{\partial x}|_{(t,x)}$ donc selon $(2)$:
+$$\frac{\partial \phi}{\partial h}|_{(t,x,0)}=\frac{1}{2}Df(t,x)= \frac{1}{2}\frac{\partial f}{\partial t}|_{(t,x)}+\frac{1}{2}f(t,x) \frac{\partial f}{\partial x}|_{(t,x)}$$
 On en déduit donc d'après $(5)$ que par identification, pour que le schéma soit d'ordre au moins 2, il faut et
 il suffit que les points $b_i$ , les poids intermédiaires $a_{ij}$ et les paramètres $c_i$
 vérifient les conditions: 
