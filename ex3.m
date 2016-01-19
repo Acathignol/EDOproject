@@ -1,5 +1,5 @@
-tspan=[0 100]
-h=1.1
+tspan=[0 30]
+h=1
 y0=2
 
 [t, y] = EulExp('ex3_dydt', tspan, y0, h) ;
@@ -8,12 +8,12 @@ hold on
 plot(t,y,'g')
 
 [t, y] = PointMilieu('ex3_dydt', tspan, y0, h) ;
-disp([t, y])
-plot(t,y,'r')
+%disp([t, y])
+%plot(t,y,'r')
 
 [t, y] = RK4('ex3_dydt', tspan, y0, h) ;
-disp([t, y])
-plot(t,y,'b')
+%disp([t, y])
+%plot(t,y,'b')
 hold off
 
 xlabel('t')
