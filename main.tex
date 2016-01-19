@@ -8,16 +8,25 @@
 \usepackage{subfig}
 \usepackage{array}
 \usepackage{wrapfig}
+\usepackage{eso-pic}
 
+\newcommand\BackgroundPic{%
+\put(0,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth,height=\paperheight,%
+keepaspectratio]{matlabresult.png}%
+\vfill
+}}}
 \begin{document}
+\AddToShipoutPicture*{\BackgroundPic}
 \title{Projet EDMO}
 \author{Annie Cathignol\\Louis Becquey\\3-BIM}
 \date{\today}
-\maketitle
-\begin{figure}[h!]
-\centering
-\includegraphics[height=6cm]{matlabresult.png}
-\end{figure}
+.\\
+
+
 
 \newpage
 
