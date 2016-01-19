@@ -24,7 +24,9 @@ keepaspectratio]{matlabresult.png}%
 \title{Projet EDMO}
 \author{Annie Cathignol\\Louis Becquey\\3-BIM}
 \date{\today}
+\begin{center}
 .\\
+\end{center}
 
 
 
@@ -41,37 +43,31 @@ $\frac{\partial^{p-1}\Phi}{\partial h^{p-1}} (t,x,0) = \frac{1}{p}D^{p-1}f(t,x)$
 \end{center}
 
 \paragraph{Démonstration:} On connait l'erreur de consistance :
-\begin{equation}
-\tau_n = x(t_{n+1})-x(t_{n})-h_n( \Phi (t_n, x(t_n),h_n)
-\end{equation} 
-Si on applique la formule de Taylor à $x(t_{n+1})-x(t_n)$, on obtient:\\
-$x(t_{n+1})-x(t_n)=\sum^{p}_{i=1} \frac{h_{n}^{i}}{i!} f^{(i-1)} (t_n,x(t_{n}))+ o(h^p_n)$ ,\\
-$\Leftrightarrow x(t_{n+1})-x(t_n) = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k+1!} f^{(k)} (t_n,x(t_{n}))] + o(h^p_n)$,\\
-$\Leftrightarrow x(t_{n+1})-x(t_n) = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{f^{(k)} (t_n,x(t_{n}))}{k+1}] + o(h^p_n)$,\\
-Et pour $\Phi (t_n,x(t_n),h_n)$:\\
-$\Phi (t_n,x(t_n),h_n)=h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{\partial^{k} \Phi}{\partial h^{k}} (t_n,x(t_{n}),0)]+ o(h^{p+1}_n)$ ,\\
-$\Leftrightarrow \Phi (t_n,x(t_n),h_n)=h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}} ]+ o(h^{p+1}_n)$
+$$\tau_n = x(t_{n+1})-x(t_{n})-h \Phi (t_n, x(t_n),h)$$
+Si on applique la formule de Taylor-Lagrange à $x(t_{n+1}) - x(t_n)$, $\exists  c \in ]t_n, t_{n+1}[ $tel que :
+\[ x(t_{n+1}) - x(t_n) = \sum_{k=1}^p \frac{(t_{n+1}-t_n)^k}{k!}\frac{d^k}{dt^k}x(t_n) + \frac{(t_{n+1}-t_n)^{p+1}}{(p+1)!}\frac{d^{p+1}}{dt^{p+1}}x(c)\]
+Et comme $h=t_{n+1}-t_n$: 
+\[ x(t_{n+1}) - x(t_n) = \sum_{k=1}^{p} \frac{h^{k}}{k!}\frac{d^{k}}{dt^{k}}x(t_n) + \frac{h^{p+1}}{(p+1)!}\frac{d^{p+1}}{dt^{p+1}}x(c)= \sum_{k=1}^{p} \frac{h^{k}}{k!}f^{(k-1)}_{(t_n, x(t_n))} + \frac{h^{p+1}}{(p+1)!}f^{(p)}_{(c, x(c))}\]
+De même pour $\Phi$, il existe $d \in ]0,h[ $ tel que :
+\[\phi(t_n,x(t_n),h) = \sum_{k=0}^{p-1} \frac{h^{k}}{k!}\frac{\partial ^{k}\phi}{\partial h^{k}}|_{(t_n,x(t_n),0)} + \frac{h^{p}}{p!}\frac{\partial ^{p}\phi}{\partial h^{p}}|_{(t_n, x(t_n), d)}
+\]
+Donc l'erreur de consistance s'écrit 
+$$\tau_n = h\sum^p_{k=1} \frac{h^{k-1}}{k!}f^{(k-1)}_{(t_n, x(t_n))} + \frac{h^{p+1}}{(p+1)!}f^{(p)}_{(c, x(c))} - h\sum^{p-1}_{k=0}\frac{h^k}{k!}\times \frac{\partial^k\Phi}{\partial h^k}|_{(t_n, x(t_n), 0)} - \frac{h^{p+1}}{p!}\times \frac{\partial^p\Phi}{\partial h^p}|_{(t_n, x(t_n), d)}$$
+$$= h\sum^{p-1}_{k=0}\left[\frac{h^k}{k!}\left(\frac{f^{(k)}_{(t_n, x(t_n))}}{k+1}-\frac{\partial^k\phi}{\partial h^k}|_{(t_n, x(t_n), 0)}\right) \right] + \frac{h^{p+1}}{p!}\left[\frac{f^{(p)}_{(c, x(c))}}{p+1}-\frac{\partial^p\phi}{\partial h^p}|_{(t_n, x(t_n), d)}\right]$$
+Et dans notre cas on a $\frac{\partial f}{\partial t}=Df$, donc
+$$\tau_n= h\sum^{p-1}_{k=0}\left[\frac{h^k}{k!}\left(\frac{D^kf_{(t_n, x(t_n))}}{k+1}-\frac{\partial^k\phi}{\partial h^k}|_{(t_n, x(t_n), 0)}\right) \right] + \frac{h^{p+1}}{p!}\left[\frac{D^pf_{(c, x(c))}}{p+1}-\frac{\partial^p\phi}{\partial h^p}|_{(t_n, x(t_n), d)}\right]$$
+Donc si $\forall k \in |[0,p-1]|$,
+$\frac{\partial^k\phi}{\partial h^k}|_{(t,x,0)} = \frac{D^{k}f_{(t,x)}}{k+1}$
+on obtient :
+\[\tau_n = \frac{h^{p+1}}{p!}\left[\frac{D^pf_{(c, x(c))}}{p+1}-\frac{\partial^p\phi}{\partial h^p}|_{(t_n, x(t_n), d)}\right]
+=o(h^p)$$
+Ainsi le schéma explicite à un pas est consistant d'ordre p avec le problème de Cauchy.\\
 
-Ce qui nous transforme l'erreur de consistance à:\\
-$\tau_n = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{f^{(k)} (t_n,x(t_{n}))}{k+1}] + o(h^p_n) - (h_n [\frac{h_{n}^{k}}{k!} \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}} ] + o(h^{p+1}_n))$\\
-$\Leftrightarrow \tau_n = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} \frac{f^{(k)} (t_n,x(t_{n}))}{k+1} - \frac{h_{n}^{k}}{k!} \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}}] + o(h^p_n)+ o(h^{p+1}_n)$\\
-
-Ce qui résulte à:
-\begin{equation}
-\Leftrightarrow \tau_n = h_n [\sum^{p-1}_{k=0} \frac{h_{n}^{k}}{k!} [\frac{f^{(k)} (t_n,x(t_{n}))}{k+1} - \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}}]] + o(h^{p+1}_n)
-\end{equation}
-
-Or, on cherche un $\tau_n$ tel que $\tau_n = o(h^{p+1}_n)$, l'erreur de consistance attendue si le schéma explicite à un pas est consistant d’ordre p. 
-Donc, pour cela, $\frac{f^{(k)} (t_n,x(t_{n}))}{k+1} - \frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}}$ doivent tous être égal à $0$, pour tout $k \in [0,p-1]$.
-Autrement dit, pour tout $k \in [0,p-1]$, $\frac{\partial^{k} \Phi (t_n,x(t_{n}),0)}{\partial h^{k}} = \frac{f^{(k)} (t_n,x(t_{n}))}{k+1} $.\\
-
-Donc, pour toute fonction f assez régulière (de classe $C^{p}$ ), le schéma explicite à un pas est consistant d’ordre p avec le problème de Cauchy correspondant si:\\
+Donc, pour toute fonction f assez régulière (de classe $C^{p}$ ), le schéma explicite à un pas est consistant d’ordre p avec le problème de Cauchy correspondant si pour k de 0 à $p-1$, on a:
 \begin{center}
-$\Phi (t,x,0) = f(t,x)$ ,  \\
-$\frac{\partial \Phi}{\partial h} (t,x,0) = \frac{1}{2}Df(t,x)$ , \\
-$\vdots$ \\
-$\frac{\partial^{p-1}\Phi}{\partial h^{p-1}} (t,x,0) = \frac{1}{p}D^{p-1}f(t,x)$ , \\
+$\frac{\partial^{k}\phi}{\partial h^{k}} (t,x,0) = \frac{1}{k+1}D^{k}f(t,x)$ . \\
 \end{center}
+\newpage
 
 
 \subsection{Résultat 2}
