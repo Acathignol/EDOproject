@@ -633,6 +633,7 @@ Il s'agit de l'équation d'un paraboloïde centré sur $(\frac{3}{8},2)$. Ainsi,
 
 \textbf{Le centre a pour coordonnées ${\frac{0.8}{0.3} \choose \frac{1.2}{0.6}}$ donc il dépend directement des paramètres du système.} Cependant, le centre existe tant que ces paramètres ont ces signes, donc changer leur valeur ne suffit pas à modifier la stabilité du point d'équilibre.\\
 On pourrait les faire changer de signe ou les annuler, mais cette fois, on ne modéliserait plus la cohabitation entre Proies et Prédateurs \textit{(on modéliserait du commensalisme, mutualisme, ou d'autres formes d'interactions)}.\\
+
 \newpage
 \subsubsection{Tentative de modification}
 On peut cependant chercher à modifier la réponse fonctionnelle pour changer l'équilibre:\\
@@ -817,9 +818,9 @@ La première remarque qu'on peut faire est que, hormis certaines fonctions d'alg
 \end{figure}
 
 \subsection{Erreurs internes de gestion de la mémoire}
-Lors de calculs de grands nombres, on aboutit systématiquement non pas à une erreur indiquant que l'on dépasse une éventuelle capacité de calcul maximale, mais à une \textit{erreur de segmentation}. Matlab préfère donc le crash sans sauvegarde possible à toute autre alternative. \\Et cet incident n'est pas ponctuel: lorsqu'un algorithme ne passe pas, il ne passe pas, même après modification et remodification, nous forçant donc à une dizaine de kills du processus avant de trouver un programme stable.\\
+Lors de calculs de grands nombres, on aboutit systématiquement non pas à une erreur indiquant que l'on dépasse une éventuelle capacité de calcul maximale, mais à une \textit{erreur de segmentation}, c'est à dire un accès à des zones non autorisées de la RAM. Matlab préfère donc le crash sans sauvegarde possible à toute autre alternative. \\Et cet incident n'est pas ponctuel: lorsqu'un algorithme ne passe pas, il ne passe pas, même après modification et remodification, nous forçant donc à une dizaine de kills de processus avant de trouver un programme stable.\\
 
-On pourrait penser que passé un certain tarif de licence, les développeurs auraient le tact de vérifier leur code. 
+On pourrait penser que passé un certain tarif de licence, les développeurs auraient l'initiative de vérifier leur code. 
 \begin{table}[h]
 \begin{tabular}{cc}
 \subfloat[Un détail qui a son importance.]{\includegraphics[scale=0.4]{fail.png}}
@@ -842,7 +843,7 @@ MatLab ne s'autorise pas de limites et ne détecte pas lorsqu'il ne peut pas. On
 \caption{La RAM déjà saturée, augmentation de la SWAP jusqu'au crash.}
 \end{figure}
 
-\textbf{Conclusion: Nous sommes venus utiliser MatLab sans préjugés, nous repartons avec. Python, avec toute sa lenteur, fonctionne sur tous les ordinateurs gratuitement et sans problèmes GRAVES.}
+\textbf{Conclusion: Nous sommes venus utiliser MatLab sans préjugés, force est de constater que, pour une licence payante, le logiciel a été créé avec un certain détachement. Python, avec toute sa lenteur, fonctionne sur tous les ordinateurs gratuitement et sans crash majeur.}
 
 
 \newpage

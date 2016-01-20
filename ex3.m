@@ -7,11 +7,11 @@ disp([t, y])
 hold on
 plot(t,y,'g')
 
-[t, y] = PointMilieu('ex3_dydt', tspan, y0, h) ;
+%[t, y] = PointMilieu('ex3_dydt', tspan, y0, h) ;
 %disp([t, y])
 %plot(t,y,'r')
 
-[t, y] = RK4('ex3_dydt', tspan, y0, h) ;
+%[t, y] = RK4('ex3_dydt', tspan, y0, h) ;
 %disp([t, y])
 %plot(t,y,'b')
 hold off
